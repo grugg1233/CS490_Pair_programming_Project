@@ -34,3 +34,7 @@ The Sakila Database is a sample database created by the MySQL team. Its primary 
 
 Submission guideline fill in the details on the provided doc 
 
+
+
+
+## DOCUMENTATION 
