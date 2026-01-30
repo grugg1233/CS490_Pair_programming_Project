@@ -21,3 +21,16 @@ The Sakila Database is a sample database created by the MySQL team. Its primary 
 - You will only be able to get maximum of 8 points per milestone
 - To get credit for a feature, it must be working as expected with proper styling and input validation.
 - You must consider edge cases for watch of the feature and make sure they are covered. Failure to consider edge cases will result in loss of the that point.
+
+## Video Deliverable 
+
+- No longer than 10 mins 
+- Run front end at the beginning of the video 
+- You must record a live demonstration 
+- Recording must be uploaded onto youtube
+- You may use your choice of software 
+- Audio and video must be clear for full credit 
+- You should take time to upload 
+
+Submission guideline fill in the details on the provided doc 
+
