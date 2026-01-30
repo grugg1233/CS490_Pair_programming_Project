@@ -3,7 +3,9 @@ import Hero from "./Components/Hero"
 export default function App() {
   return (
   <>
-    <Hero></Hero>
+    <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
   </>
   )
 }
