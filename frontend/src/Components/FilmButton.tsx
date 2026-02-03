@@ -9,30 +9,37 @@ type StyledButtonProps = {
 
 const StyledButton = ({rank, title, rentals} : StyledButtonProps) => {
     return (
+        <section>
         <button 
-                className=" relative w-72 rounded-xl border border-white/10
-                            bg-gray-800 p-4 text-center h-80 align-text-bottom
+                className=" card bg-base-100 w-96 shadow-sm
                             transition duration-300 ease-in-out
                             hover:border-white hover:bg-red-900
-                            focus:outline-none focus-visible:ring focus-visible:ring-white/40
-                " 
-            >
-            <div className="absolute top-3 left-3
-                            flex h-10 w-10 items-center justify-center
-                            rounded-full bg-red-700 text-white font-bold
-                                            ">               
-                    {rank}
-            </div>
+                            focus:outline-none focus-visible:ring focus-visible:ring-white/40" >
+                <div className="card-body">
+                        <h2 className="card-title text-white font-bold absolute top-3 left-40">{title}</h2>
+                </div>
+                <figure>
+                <img
+                src="https://static.vecteezy.com/system/resources/thumbnails/072/460/715/small/film-strip-capturing-city-street-at-nightgraphy-concept-photo.jpg"
+                alt="Shoes" />
+                </figure>
+                <div className="absolute top-12 left-3
+                                flex h-10 w-10 items-center justify-center
+                                rounded-full bg-gray-400 text-white font-bold
+                                ">               
+                        #{rank}
+                </div>
 
-            <div className="  t-2 flex items-center gap-2 text-white/80  ">    
-                    {rentals}
-            </div>
+                <div className="  t-2 flex items-center gap-2 text-white/80  ">    
+                        Number of Rentals: {rentals}
+                </div>
 
-            <div className="text-white font-extrabold tracking-wide">
-                    {title}
-            </div>
+        
+        </button>
 
-            </button>
-    )
+
+
+    </section>
+    );
 };
 export default StyledButton;
