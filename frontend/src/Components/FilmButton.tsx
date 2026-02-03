@@ -18,7 +18,7 @@ const StyledButton = ({rank, title, rentals, imageU} : StyledButtonProps) => {
                 <button 
                         tabIndex={0} role="button" 
                         onClick={() => setOpen((v) => !v)}
-                        className=" card bg-base-100 w-96 shadow-sm
+                        className=" card bg-base-100 relative w-full shadow-sm
                                 transition duration-300 ease-in-out
                                 hover:border-white hover:bg-red-900
                                 focus:outline-none focus-visible:ring focus-visible:ring-white/40" >
