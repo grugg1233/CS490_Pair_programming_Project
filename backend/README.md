@@ -13,4 +13,3 @@ uv sync
 ```
 uv run -- flask --app main  run -p 3000
 ```
-
