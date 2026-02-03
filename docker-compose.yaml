@@ -1,7 +1,7 @@
 name: sakila
 
 services:
-  web:
+  frontend:
     build:
       context: frontend
       dockerfile: Dockerfile
@@ -9,6 +9,7 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     stdin_open: true
     tty: true
     command: npm run dev
