@@ -1,6 +1,6 @@
 const TopActors = () => {
     return (
-        <ul className="list bg-base-100 rounded-box shadow-md">
+        <ul className="list bg-base-100 shadow-md">
         
         <li className="p-4 pb-2 text-xl opacity-60 tracking-wide">Top Actors</li>
         
