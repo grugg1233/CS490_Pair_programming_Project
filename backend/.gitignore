@@ -1,0 +1,92 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.so
+
+# C extensions
+*.dll
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+share/python-wheels/
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pyenv
+.python-version
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+logs/
+*.log
+uvicorn*.log
+
+# Test and coverage
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Type checkers / caches
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Django / database / migrations
+*.sqlite3
+db.sqlite3
+local_settings.py
+media/
+staticfiles/
+# If using Django migrations but you want to ignore generated files, uncomment:
+# */migrations/*.py[cod]
+# !*/migrations/__init__.py
+
+# Environment variables
+.env
+.env.* 
+secrets.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Documentation
+docs/_build/
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Misc
+*.egg
+*.manifest
+*.spec
