@@ -1,5 +1,14 @@
 import StyledButton from "./FilmButton";
+import axios from 'axios';
+
+
+
 const HomeFilm = () => {
+
+    axios.get('http://127.0.0.1:3000/')
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err))
+
     return (
         <section className="bg-black">
             <h1 className="text-3xl font-bold leading-tight text-white p-3  ">Top Rented Films</h1>

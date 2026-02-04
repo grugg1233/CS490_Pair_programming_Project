@@ -10,24 +10,28 @@ def return_films():
     cursor = connection.cursor()
 
     cursor.execute(
-        """SELECT
-        film.film_id,
-        film.title,
-        COUNT(rental.rental_id) AS rental_count
-    FROM rental
-    JOIN inventory ON rental.inventory_id = inventory.inventory_id
-    JOIN film ON inventory.film_id = film.film_id
-    JOIN film_actor ON film.film_id = film_actor.film_id
-    WHERE film_actor.actor_id = (
-        SELECT film_actor.actor_id
-        FROM film_actor
-        GROUP BY film_actor.actor_id
-        ORDER BY COUNT(film_actor.film_id) DESC
-        LIMIT 1
-    )
-    GROUP BY film.film_id, film.title
-    ORDER BY rental_count DESC
-    LIMIT 5;"""
+        """
+        select 
+            i.film_id,
+            f.title,
+            c.name,
+            COUNT(*) as cnt 
+        from 
+            rental as r
+            inner join inventory as i
+                on r.inventory_id = i.inventory_id 
+            inner join film as f
+                on i.film_id = f.film_id
+            inner join film_category as fc
+                on f.film_id = fc.film_id
+            inner join category as c
+                on fc.category_id = c.category_id
+        group by
+            i.film_id, f.title, c.name
+        order by
+            cnt desc 
+	    limit 5;	
+        """
     )
 
     films = cursor.fetchall()

@@ -1,13 +1,14 @@
-from test import return_films
-from flask import Flask
-
+import test as t 
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 app = Flask(__name__)
 
+cors = CORS(app, resources={r"*": {"origins": "*"}})
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def return_films():
-    films = return_films()
-    return films
+    return jsonify(t.return_films()) 
+    
 
 
 if __name__ == "__main__":

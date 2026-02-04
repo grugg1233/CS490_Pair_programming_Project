@@ -1,6 +1,8 @@
 type FilmInfoCardProps = {
   open: boolean;
 };
+// TODO: 
+// make this a modal using daisyui
 
 const FilmInfoCard = ({ open }: FilmInfoCardProps) => {
   if (!open) return null;

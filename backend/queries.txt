@@ -1,0 +1,130 @@
+--  1.Display film id, title, and film category name
+select 
+	fc.film_id ,
+	f.title,
+	fc.category_id , 
+	c.name
+from 
+	film_category as fc
+	inner join category as c
+		on fc.category_id = c.category_id 
+	inner join film f
+		on fc.film_id = f.film_id
+;
+
+-- 2.	Display film count by category name. ex. Action 64, Animation 66, etc…
+
+select
+	c.name, COUNT(*) as cnt 
+from 
+	film_category as fc
+	inner join category as c
+		on fc.category_id = c.category_id
+	group by 
+		c.category_id , c.name
+	order by 
+		c.name asc
+;
+-- 3.	Display the number of films an actor is part of in order where actors that have done most films first.
+select
+	a.actor_id, 
+	a.first_name, 
+	a.last_name,
+	COUNT(*) as cnt
+from
+	film_actor as fa
+	inner join actor as a 	
+		on fa.actor_id = a.actor_id 
+	group by
+		a.actor_id, a.first_name, a.last_name
+	order by
+		cnt desc
+;
+
+-- 4.	Find how many copies of a certain film a store has
+select 
+	i.store_id,
+	i.film_id, 
+	COUNT(*) as DVD
+from
+	inventory as i
+group by
+	i.store_id, i.film_id 
+order by 
+	i.store_id asc
+;
+
+-- 5.	Display list of all dvds that are rented out.
+select * from rental where return_date is null; 
+
+-- 6.	Display film id, title, category and rental count of the top 5 rented films 
+select 
+	i.film_id,
+	f.title,
+	c.name,
+	COUNT(*) as cnt 
+from 
+	rental as r
+	inner join inventory as i
+		on r.inventory_id = i.inventory_id 
+	inner join film as f
+		on i.film_id = f.film_id
+	inner join film_category as fc
+		on f.film_id = fc.film_id
+	inner join category as c
+		on fc.category_id = c.category_id
+group by
+	 i.film_id, f.title, c.name
+order by
+	cnt desc 
+	limit 5
+;	
+
+-- 7.	Display film id, title, rental count of the top 5 rented movies of the actor who has done the most films.
+
+select 
+	i.film_id,
+	f.title,
+	COUNT(*) as cnt 
+from 
+	rental as r
+	inner join inventory as i
+		on r.inventory_id = i.inventory_id 
+	inner join film as f
+		on i.film_id = f.film_id
+	inner join film_actor as fa
+		on f.film_id  = fa.film_id 
+where fa.actor_id  = 
+	(
+		select 
+			fa2.actor_id 
+		from 
+			film_actor as fa2 
+		group by 
+			fa2.actor_id 
+		order by 
+			COUNT(*) desc
+			limit 1
+	)
+group by
+	i.film_id , f.title 
+order by
+	cnt desc 
+	limit 5
+;	
+
+-- 8.	How many dvds has a customer rented? Display their first name, last name along with rental count.
+select 
+	c.customer_id,	
+	c.first_name,
+	c.last_name , 
+	COUNT(*) as count_of_rentals
+from 
+	rental as r
+	inner join customer as c 
+		on r.customer_id = c.customer_id 
+group by
+	c.customer_id , c.first_name , c.last_name 
+order by 
+	count_of_rentals desc
+; 
