@@ -5,7 +5,7 @@ import mysql.connector as connecter
 
 def return_films():
     connection = connecter.connect(
-        user="root", password="root", host="localhost", port="3306", database="sakila"
+        user="root", password="root", host="sakila-db", port="3306", database="sakila"
     )
     cursor = connection.cursor()
 
