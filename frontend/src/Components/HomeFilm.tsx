@@ -1,13 +1,29 @@
+import { useEffect, useState } from "react";
 import StyledButton from "./FilmButton";
 import axios from "axios";
 
-const HomeFilm = () => {
-  axios
-    .get("http://localhost:8080")
-    .then((res) => console.log(res.data))
-    .catch((err) => console.log(err));
+interface FilmInterface {
+  film_id: number;
+  title: string;
+  category: string;
+  count: number;
+}
 
-  return (
+const fetchFilm = async (): Promise<FilmInterface[]> => {
+  const response = await axios.get<FilmInterface[]>("http://localhost:8080");
+  return response.data;
+};
+
+
+const HomeFilm = () => {
+    const [filmArray, setFilmArray ] = useState<FilmInterface[]>([]);
+    
+    useEffect(() => {
+      fetchFilm().then(setFilmArray).catch(console.error);  
+      console.log(filmArray)
+    }, []);
+
+    return (
     <section className="bg-black">
       <h1 className="text-3xl font-bold leading-tight text-white p-3  ">
         Top Rented Films
@@ -16,8 +32,8 @@ const HomeFilm = () => {
         <div id="slide1" className="carousel-item ">
           <StyledButton
             rank={1}
-            title="Movie Name"
-            rentals={500}
+            title={filmArray[0]?.title}
+            rentals={filmArray[0]?.count}
             imageU="https://static.vecteezy.com/system/resources/thumbnails/072/460/715/small/film-strip-capturing-city-street-at-nightgraphy-concept-photo.jpg"
           />
           <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
