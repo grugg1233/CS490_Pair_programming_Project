@@ -11,6 +11,5 @@ cors = CORS(app, resources={r"*": {"origins": "*"}})
 def return_films():
     return jsonify(t.return_films())
 
-
 if __name__ == "__main__":
     app.run(debug=True)

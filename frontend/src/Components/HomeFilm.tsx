@@ -11,19 +11,19 @@ interface FilmInterface {
 
 const fetchFilm = async (): Promise<FilmInterface[]> => {
   const response = await axios.get<FilmInterface[]>("http://localhost:8080");
+  console.log(response.data);
   return response.data;
 };
 
-
 const HomeFilm = () => {
-    const [filmArray, setFilmArray ] = useState<FilmInterface[]>([]);
-    
-    useEffect(() => {
-      fetchFilm().then(setFilmArray).catch(console.error);  
-      console.log(filmArray)
-    }, []);
+  const [filmArray, setFilmArray] = useState<FilmInterface[]>([]);
 
-    return (
+  useEffect(() => {
+    fetchFilm().then(setFilmArray).catch(console.error);
+    console.log(filmArray);
+  }, []);
+
+  return (
     <section className="bg-black">
       <h1 className="text-3xl font-bold leading-tight text-white p-3  ">
         Top Rented Films
