@@ -1,7 +1,7 @@
 type FilmInfoCardProps = {
   open: boolean;
 };
-// TODO: 
+// TODO:
 // make this a modal using daisyui
 
 const FilmInfoCard = ({ open }: FilmInfoCardProps) => {
@@ -10,7 +10,9 @@ const FilmInfoCard = ({ open }: FilmInfoCardProps) => {
   return (
     <div className="card card-sm bg-red-600 w-64 shadow-md">
       <div className="card-body">
-        <p className="text-white">This is a card. You can use any element as a dropdown.</p>
+        <p className="text-white">
+          This is a card. You can use any element as a dropdown.
+        </p>
       </div>
     </div>
   );

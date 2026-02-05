@@ -1,15 +1,14 @@
-import Hero from "./Components/Hero"
-import Navbar from "./Components/Navbar"
-import HomeFilm from "./Components/HomeFilm"
-import TopActors from "./Components/TopActors"
+import Home from "./Pages/Home";
+import Films from "./Pages/Films";
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 export default function App() {
   return (
-  <>
-    <Navbar></Navbar>
-    <Hero></Hero>
-    <HomeFilm></HomeFilm>
-    <TopActors></TopActors>
-  </>
-  )
+  <Router>
+    <Routes>
+      <Route path="/" element={<Home/>} />
+      <Route path="/films" element={<Films/>} />
+    </Routes>
+  </Router>
+  );
 }

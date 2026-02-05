@@ -16,10 +16,6 @@ const Hero = () => {
             Browse our collection of classics and discover your next favorite
             film.
           </p>
-
-          <button className="mt-6 rounded bg-red-600 px-6 py-3 text-sm font-semibold hover:bg-red-700 transition">
-            Get 
-          </button>
         </div>
       </div>
     </section>
