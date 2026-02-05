@@ -9,18 +9,33 @@ interface FilmInterface {
   count: number;
 }
 
+
+type FilmRow = [number, string, string, number];
+
 const fetchFilm = async (): Promise<FilmInterface[]> => {
-  const response = await axios.get<FilmInterface[]>("http://localhost:8080");
-  console.log(response.data);
-  return response.data;
-};
+  const response = await axios.get<FilmRow[]>("http://localhost:8080");
+
+const films: FilmInterface[] = response.data.map(([film_id, title, category, count]) => ({
+    film_id,
+    title,
+    category,
+    count,
+}));
+return films; 
+}; 
 
 const HomeFilm = () => {
   const [filmArray, setFilmArray] = useState<FilmInterface[]>([]);
 
   useEffect(() => {
-    fetchFilm().then(setFilmArray).catch(console.error);
-    console.log(filmArray);
+    fetchFilm()
+      .then((data) => {
+        setFilmArray(data);
+        console.log("Fetched:", data, filmArray);
+      })
+      .catch((error: Error) => {
+        console.error(error.message);
+      });
   }, []);
 
   return (
@@ -48,8 +63,8 @@ const HomeFilm = () => {
         <div id="slide2" className="carousel-item ">
           <StyledButton
             rank={2}
-            title="Movie Name"
-            rentals={500}
+            title={filmArray[1]?.title}
+            rentals={filmArray[1]?.count}
             imageU="https://static.vecteezy.com/system/resources/thumbnails/072/460/715/small/film-strip-capturing-city-street-at-nightgraphy-concept-photo.jpg"
           />
           <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
@@ -64,8 +79,8 @@ const HomeFilm = () => {
         <div id="slide3" className="carousel-item ">
           <StyledButton
             rank={3}
-            title="Movie Name"
-            rentals={500}
+            title={filmArray[2]?.title}
+            rentals={filmArray[2]?.count}
             imageU="https://static.vecteezy.com/system/resources/thumbnails/072/460/715/small/film-strip-capturing-city-street-at-nightgraphy-concept-photo.jpg"
           />
           <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
@@ -80,8 +95,8 @@ const HomeFilm = () => {
         <div id="slide4" className="carousel-item ">
           <StyledButton
             rank={4}
-            title="Movie Name"
-            rentals={500}
+            title={filmArray[3]?.title}
+            rentals={filmArray[3]?.count}
             imageU="https://static.vecteezy.com/system/resources/thumbnails/072/460/715/small/film-strip-capturing-city-street-at-nightgraphy-concept-photo.jpg"
           />
           <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
@@ -96,8 +111,8 @@ const HomeFilm = () => {
         <div id="slide5" className="carousel-item ">
           <StyledButton
             rank={5}
-            title="Movie Name"
-            rentals={500}
+            title={filmArray[4]?.title} 
+            rentals={filmArray[4]?.count}
             imageU="https://static.vecteezy.com/system/resources/thumbnails/072/460/715/small/film-strip-capturing-city-street-at-nightgraphy-concept-photo.jpg"
           />
           <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
