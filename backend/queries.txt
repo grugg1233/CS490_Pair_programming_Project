@@ -1,63 +1,18 @@
---  1.Display film id, title, and film category name
-select 
-	fc.film_id ,
-	f.title,
-	fc.category_id , 
-	c.name
-from 
-	film_category as fc
-	inner join category as c
-		on fc.category_id = c.category_id 
-	inner join film f
-		on fc.film_id = f.film_id
-;
+-- Features (User Stories):
+-- Landing Page (4):
+-- •    As a user I want to view top 5 rented films of all times
+-- •    As a user I want to be able to click on any of the top 5 films and view its details
+-- •    As a user I want to be able to view top 5 actors that are part of films I have in the store
+-- •    As a user I want to be able to view the actor’s details and view their top 5 rented films
+-- Films Page (3):
+-- •    As a user I want to be able to search a film by name of film, name of an actor, or genre of the film
+-- •    As a user I want to be able to view details of the film
+-- •    As a user I want to be able to rent a film out to a customer
 
--- 2.	Display film count by category name. ex. Action 64, Animation 66, etc…
-
-select
-	c.name, COUNT(*) as cnt 
-from 
-	film_category as fc
-	inner join category as c
-		on fc.category_id = c.category_id
-	group by 
-		c.category_id , c.name
-	order by 
-		c.name asc
-;
--- 3.	Display the number of films an actor is part of in order where actors that have done most films first.
-select
-	a.actor_id, 
-	a.first_name, 
-	a.last_name,
-	COUNT(*) as cnt
-from
-	film_actor as fa
-	inner join actor as a 	
-		on fa.actor_id = a.actor_id 
-	group by
-		a.actor_id, a.first_name, a.last_name
-	order by
-		cnt desc
-;
-
--- 4.	Find how many copies of a certain film a store has
-select 
-	i.store_id,
-	i.film_id, 
-	COUNT(*) as DVD
-from
-	inventory as i
-group by
-	i.store_id, i.film_id 
-order by 
-	i.store_id asc
-;
-
--- 5.	Display list of all dvds that are rented out.
-select * from rental where return_date is null; 
-
--- 6.	Display film id, title, category and rental count of the top 5 rented films 
+-- 1 & 2 TODO : (update this to get the rest of the data for a movie) 
+-- film_id, title, description, release_year, language_id , original_language_id, rental_duration, rental_rate
+-- length, replacement_cost, rating, special_features
+--                  |============> category_id (category/name) actor_id (acotr/name)
 select 
 	i.film_id,
 	f.title,
@@ -80,7 +35,9 @@ order by
 	limit 5
 ;	
 
--- 7.	Display film id, title, rental count of the top 5 rented movies of the actor who has done the most films.
+
+-- 3 & 4 Top 5 actors and their detail + top 5 rented films 
+-- expand on this (this will get the top 5 films for the top actor)
 
 select 
 	i.film_id,
@@ -112,19 +69,3 @@ order by
 	cnt desc 
 	limit 5
 ;	
-
--- 8.	How many dvds has a customer rented? Display their first name, last name along with rental count.
-select 
-	c.customer_id,	
-	c.first_name,
-	c.last_name , 
-	COUNT(*) as count_of_rentals
-from 
-	rental as r
-	inner join customer as c 
-		on r.customer_id = c.customer_id 
-group by
-	c.customer_id , c.first_name , c.last_name 
-order by 
-	count_of_rentals desc
-; 
