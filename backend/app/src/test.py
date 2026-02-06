@@ -28,28 +28,34 @@ def return_films():
             """)
             return cursor.fetchall()
 
-def return_actors():
+def return_actors(s_id: int):
     with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("""
+            cursor.execute(f"""
                 select 
-                    i.film_id,
-                    f.title,
-                    COUNT(*) as cnt 
-                from rental as r
-                inner join inventory as i on r.inventory_id = i.inventory_id 
-                inner join film as f on i.film_id = f.film_id
-                inner join film_actor as fa on f.film_id  = fa.film_id 
-                where fa.actor_id =
-                    (
-                        select fa2.actor_id
-                        from film_actor as fa2
-                        group by fa2.actor_id
-                        order by COUNT(*) desc
-                        limit 1
-                    )
-                group by i.film_id, f.title
-                order by cnt desc
-                limit 5;
+                    a.actor_id,
+                    a.first_name,
+                    a.last_name, 
+                    s.store_id,
+                    addr.address,
+                    COUNT(*) as cnt
+                from 
+                    actor as a
+                    inner join film_actor fa 
+                        on a.actor_id  = fa.actor_id 
+                    inner join film as f 
+                        on fa.film_id  = f.film_id
+                    inner join inventory as i
+                        on f.film_id  = i .film_id 
+                    inner join store as s 
+                        on i.store_id  = s.store_id
+                    inner join address as addr 
+                        on s.address_id  = addr.address_id 
+                where s.store_id  = {s_id}
+                group by 
+                    s.store_id, a.actor_id, a.first_name, a.last_name
+                order by
+                    cnt desc 
+                    limit 5
             """)
             return cursor.fetchall()

@@ -9,7 +9,7 @@ export default function Home() {
       <Navbar></Navbar>
       <Hero></Hero>
       <HomeFilm></HomeFilm>
-      <TopActors></TopActors>
+      <TopActors storeId={1} />
     </>
   );
 }

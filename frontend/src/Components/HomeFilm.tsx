@@ -11,7 +11,7 @@ const HomeFilm = () => {
 
   useEffect(() => {
     axios
-      .get<FilmTuple[]>("http://localhost:8080/")
+      .get<FilmTuple[]>("http://localhost:8080/topFilms")
       .then((res) => {
         setFilms(res.data);
         setLoading(false);
