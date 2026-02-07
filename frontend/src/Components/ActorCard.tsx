@@ -1,11 +1,16 @@
-import type { ActorData } from "../utils/types";
+import type { ActorData, ActorMovies } from "../utils/types";
 
 interface ActorCardProps {
   actor: ActorData;
-  rank: number; // 1..5 (or however many)
+  rank: number;
+  movies: ActorMovies[]; // all movies for all top actors
 }
 
-const ActorCard = ({ actor, rank }: ActorCardProps) => {
+const ActorCard = ({ actor, rank, movies }: ActorCardProps) => {
+  const modalId = `actor_modal_${actor.actor_id}`;
+
+  const actorMovies = movies.filter((m) => m.actor_id === actor.actor_id);
+
   return (
     <li className="list-row">
       <div className="text-4xl font-thin opacity-30 tabular-nums">
@@ -29,7 +34,13 @@ const ActorCard = ({ actor, rank }: ActorCardProps) => {
         </div>
       </div>
 
-      <button className="btn btn-square btn-ghost" aria-label="play">
+      <button
+        className="btn btn-square btn-ghost"
+        onClick={() =>
+          (document.getElementById(modalId) as HTMLDialogElement | null)?.showModal()
+        }
+        aria-label="Show actor films"
+      >
         <svg
           className="size-[1.2em]"
           xmlns="http://www.w3.org/2000/svg"
@@ -46,6 +57,35 @@ const ActorCard = ({ actor, rank }: ActorCardProps) => {
           </g>
         </svg>
       </button>
+
+      <dialog id={modalId} className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">
+            Top films for {actor.first_name} {actor.last_name}
+          </h3>
+
+          {actorMovies.length === 0 ? (
+            <p className="py-4 opacity-70">No films found for this actor.</p>
+          ) : (
+            <ul className="mt-4 space-y-2">
+              {actorMovies.map((m) => (
+                <li key={m.title} className="flex justify-between">
+                  <span>{m.title}</span>
+                  <span className="opacity-60 tabular-nums">{m.rental_count}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <p className="py-4 opacity-60">
+            Press ESC key or click outside to close
+          </p>
+        </div>
+
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </li>
   );
 };

@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import ActorCard from "./ActorCard";
-import type { ActorData } from "../utils/types";
-
-type ActorTuple = [number, string, string, number, string, number];
-// [actor_id, first_name, last_name, store_id, address, count]
+import type { ActorData, ActorMovies } from "../utils/types";
 
 interface TopActorsProps {
   storeId: number;
@@ -12,22 +9,34 @@ interface TopActorsProps {
 }
 
 const TopActors = ({ storeId, title = "Top Actors" }: TopActorsProps) => {
-  const [actors, setActors] = useState<ActorTuple[]>([]);
+  const [actors, setActors] = useState<ActorData[]>([]);
+  const [movies, setMovies] = useState<ActorMovies[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const url = useMemo(
+  const actorsUrl = useMemo(
     () => `http://localhost:8080/topactors/${storeId}`,
+    [storeId]
+  );
+
+  const moviesUrl = useMemo(
+    () => `http://localhost:8080/topactorsfilms/${storeId}`,
     [storeId]
   );
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get<ActorTuple[]>(url)
-      .then((res) => setActors(res.data))
-      .catch((err) => console.error(err))
+
+    Promise.all([
+      axios.get<ActorData[]>(actorsUrl),
+      axios.get<ActorMovies[]>(moviesUrl),
+    ])
+      .then(([actorsRes, moviesRes]) => {
+        setActors(actorsRes.data);
+        setMovies(moviesRes.data);
+      })
+      .catch(console.error)
       .finally(() => setLoading(false));
-  }, [url]);
+  }, [actorsUrl, moviesUrl]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -35,16 +44,14 @@ const TopActors = ({ storeId, title = "Top Actors" }: TopActorsProps) => {
     <ul className="list bg-base-100 shadow-md">
       <li className="p-4 pb-2 text-xl opacity-60 tracking-wide">{title}</li>
 
-      {actors.map((a, idx) => {
-        const actor: ActorData = {
-          actor_id: a[0],
-          first_name: a[1],
-          last_name: a[2],
-          count: a[5],
-        };
-
-        return <ActorCard key={actor.actor_id} actor={actor} rank={idx + 1} />;
-      })}
+      {actors.map((actor, idx) => (
+        <ActorCard
+          key={actor.actor_id}
+          actor={actor}
+          rank={idx + 1}
+          movies={movies}
+        />
+      ))}
     </ul>
   );
 };

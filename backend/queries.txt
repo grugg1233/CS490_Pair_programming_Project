@@ -124,3 +124,51 @@ order by
 	cnt desc 
 	limit 5
 	
+
+-- Select the top 5 films for each of the top 5 actors
+
+WITH top_actors AS (
+  SELECT
+    fa.actor_id
+  FROM inventory i
+  JOIN rental r      ON r.inventory_id = i.inventory_id
+  JOIN film_actor fa ON fa.film_id = i.film_id
+  WHERE i.store_id = 1
+  GROUP BY fa.actor_id
+  ORDER BY COUNT(*) DESC
+  LIMIT 5
+),
+actor_film_counts AS (
+  SELECT
+    fa.actor_id,
+    f.film_id,
+    f.title,
+    COUNT(*) AS rental_count
+  FROM rental r
+  JOIN inventory i   ON r.inventory_id = i.inventory_id
+  JOIN film f        ON i.film_id = f.film_id
+  JOIN film_actor fa ON f.film_id = fa.film_id
+  WHERE i.store_id = 1
+    AND fa.actor_id IN (SELECT actor_id FROM top_actors)
+  GROUP BY fa.actor_id, f.film_id, f.title
+),
+ranked AS (
+  SELECT
+    actor_id,
+    film_id,
+    title,
+    rental_count,
+    ROW_NUMBER() OVER (
+      PARTITION BY actor_id
+      ORDER BY rental_count DESC, title
+    ) AS rn
+  FROM actor_film_counts
+)
+SELECT
+  actor_id,
+  film_id,
+  title,
+  rental_count
+FROM ranked
+WHERE rn <= 5
+ORDER BY actor_id, rental_count DESC, title;
