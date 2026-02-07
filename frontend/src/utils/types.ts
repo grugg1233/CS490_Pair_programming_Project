@@ -20,3 +20,7 @@ export interface ActorMovies {
   title: string;
   rental_count: number;
 }
+
+export interface ActorWithMovies extends ActorData {
+  movies: ActorMovies[];
+}

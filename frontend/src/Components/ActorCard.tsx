@@ -3,13 +3,11 @@ import type { ActorData, ActorMovies } from "../utils/types";
 interface ActorCardProps {
   actor: ActorData;
   rank: number;
-  movies: ActorMovies[]; // all movies for all top actors
+  movies: ActorMovies[]; 
 }
 
 const ActorCard = ({ actor, rank, movies }: ActorCardProps) => {
   const modalId = `actor_modal_${actor.actor_id}`;
-
-  const actorMovies = movies.filter((m) => m.actor_id === actor.actor_id);
 
   return (
     <li className="list-row">
@@ -27,7 +25,7 @@ const ActorCard = ({ actor, rank, movies }: ActorCardProps) => {
 
       <div className="list-col-grow">
         <div>
-          {actor.first_name} {actor.last_name}
+          {actor.first_name} {actor.last_name} | actor id: {actor.actor_id}
         </div>
         <div className="text-xs uppercase font-semibold opacity-60">
           Rentals: {actor.count}
@@ -61,15 +59,15 @@ const ActorCard = ({ actor, rank, movies }: ActorCardProps) => {
       <dialog id={modalId} className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">
-            Top films for {actor.first_name} {actor.last_name}
+            Top films for {actor.first_name} {actor.last_name} | actor id: {actor.actor_id}
           </h3>
 
-          {actorMovies.length === 0 ? (
+          {movies.length === 0 ? (
             <p className="py-4 opacity-70">No films found for this actor.</p>
           ) : (
             <ul className="mt-4 space-y-2">
-              {actorMovies.map((m) => (
-                <li key={m.title} className="flex justify-between">
+              {movies.map((m) => (
+                <li key={`${m.actor_id}-${m.title}`} className="flex justify-between">
                   <span>{m.title}</span>
                   <span className="opacity-60 tabular-nums">{m.rental_count}</span>
                 </li>
@@ -77,9 +75,7 @@ const ActorCard = ({ actor, rank, movies }: ActorCardProps) => {
             </ul>
           )}
 
-          <p className="py-4 opacity-60">
-            Press ESC key or click outside to close
-          </p>
+          <p className="py-4 opacity-60">Press ESC key or click outside to close</p>
         </div>
 
         <form method="dialog" className="modal-backdrop">

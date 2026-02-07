@@ -29,7 +29,6 @@ def return_films():
             cursor.execute(sql)
             return cursor.fetchall()
 
-
 def return_actors(s_id: int):
     sql = """
         SELECT
@@ -39,14 +38,14 @@ def return_actors(s_id: int):
             s.store_id,
             addr.address,
             COUNT(*) AS count
-        FROM actor a
-        JOIN film_actor fa ON a.actor_id = fa.actor_id
-        JOIN film f        ON fa.film_id = f.film_id
-        JOIN inventory i   ON f.film_id = i.film_id
+        FROM rental r
+        JOIN inventory i   ON r.inventory_id = i.inventory_id
         JOIN store s       ON i.store_id = s.store_id
         JOIN address addr  ON s.address_id = addr.address_id
+        JOIN film_actor fa ON fa.film_id = i.film_id
+        JOIN actor a       ON a.actor_id = fa.actor_id
         WHERE s.store_id = %s
-        GROUP BY s.store_id, a.actor_id, a.first_name, a.last_name, addr.address
+        GROUP BY a.actor_id, a.first_name, a.last_name, s.store_id, addr.address
         ORDER BY count DESC
         LIMIT 5;
     """
@@ -54,6 +53,7 @@ def return_actors(s_id: int):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (s_id,))
             return cursor.fetchall()
+
 
 
 def return_top5films_top5Actors(s_id: int):
