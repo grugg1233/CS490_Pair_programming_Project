@@ -103,3 +103,47 @@ def return_top5films_top5Actors(s_id: int):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (s_id, s_id))
             return cursor.fetchall()
+
+def return_Film_Modal_Info(film_id):
+    sql = """
+        select 
+            f.title,
+            f.description,
+            f.release_year,
+            f.length,
+            f.rating,
+            f.rental_rate,
+            f.rental_duration,
+            L.name
+        from film as f 
+            inner join 
+                language as L 
+                    on f.language_id = L.language_id   
+        where
+            f.film_id = %s
+        ;
+
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (film_id,))
+            return cursor.fetchall() 
+        
+def return_Film_Modal_actors(film_id):
+    sql = """
+        select
+            a.first_name,
+            a.last_name 
+        from film as f 
+            inner join film_actor as fa 
+                on f.film_id = fa.film_id  
+            inner join actor as a 
+                on fa.actor_id = a.actor_id 
+        where f.film_id = %s
+        order by last_name desc
+        ;      
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (film_id,))
+            return cursor.fetchall() 

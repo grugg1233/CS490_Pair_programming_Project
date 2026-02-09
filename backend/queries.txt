@@ -172,3 +172,41 @@ SELECT
 FROM ranked
 WHERE rn <= 5
 ORDER BY actor_id, rental_count DESC, title;
+
+
+-- language [ language_id ]: name
+-- film : rental rate, rating, length title, description, release year, rental duration
+-- film_actors: actors_id -> actor : first and last name 
+-- film_category -> category :  name
+
+select 
+	f.title,
+	f.description,
+	f.release_year,
+	f.length,
+	f.rating,
+	f.rental_rate,
+	f.rental_duration,
+	L.name
+from film as f 
+	inner join 
+		language as L 
+			on f.language_id = L.language_id   
+where
+	f.film_id = 1
+;
+
+
+-- list of actor ids in asc order
+select
+	a.first_name,
+	a.last_name e
+from film as f 
+inner join film_actor as fa on f.film_id = fa.film_id  inner join actor as a on fa.actor_id = a.actor_id 
+where f.film_id = 100
+order by last_name desc
+;  
+
+select special_features from film where film_id =1; -- "behind the scenes"
+select description from film where film_id =1; -- "this movie is about xyz"
+select rating from film where film_id =1; -- pg / g / R 
