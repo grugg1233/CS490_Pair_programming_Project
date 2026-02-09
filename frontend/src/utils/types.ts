@@ -24,5 +24,18 @@ export interface ActorWithMovies extends ActorData {
   movies: ActorMovies[];
 }
 export interface FilmDetails {
-  film_id: number;
+  description: string;
+  length: number;
+  name: string; //language
+  rating: string; 
+  release_year: number;
+  rental_duration: number; 
+  rental_rate: string; 
+  title: string; //movie title
+  
+}
+
+export interface filmActors {
+  first_name: string; 
+  last_nmae: string; 
 }

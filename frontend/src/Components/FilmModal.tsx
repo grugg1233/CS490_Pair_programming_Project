@@ -21,7 +21,10 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
 
     axios
       .get<FilmDetails>(`http://localhost:8080/filminfo/${filmId}`)
-      .then((res) => setFilm(res.data))
+      .then((res) => {setFilm(res.data);
+                  console.log('data: :', res.data); 
+
+      })
       .catch((err) => {
         console.error(err);
         setError(true);
@@ -47,7 +50,7 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
             {loading && <p>Loading...</p>}
             {error && <p>Error...</p>}
             {!loading && !error && film && (
-              <h3 className="font-bold text-lg">{film.film_id}</h3>
+              <h3 className="font-bold text-lg">{film.description}</h3>
             )}
           </div>
           <div className="modal-action">

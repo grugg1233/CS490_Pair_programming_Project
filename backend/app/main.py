@@ -19,7 +19,7 @@ def top_actors_films(store_id: int):
 
 @app.route("/filminfo/<int:film_id>", methods=["GET"])
 def film_modal_info(film_id: int):
-    return jsonify(t.return_Film_Modal_actors(film_id))
+    return jsonify(t.return_Film_Modal_Info(film_id))
 
 @app.route("/filminfo/actors/<int:film_id>", methods=["GET"])
 def film_modal_actors(film_id: int): 
