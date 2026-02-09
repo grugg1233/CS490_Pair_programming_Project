@@ -4,9 +4,11 @@ DB_CONFIG = dict(
     user="root",
     password="root",
     host="db",
+    host="db",
     port=3306,
     database="sakila",
 )
+
 
 def return_films():
     sql = """
