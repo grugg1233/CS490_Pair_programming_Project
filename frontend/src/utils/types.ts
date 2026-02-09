@@ -14,7 +14,6 @@ export interface ActorData {
   count: number;
 }
 
-
 export interface ActorMovies {
   actor_id: number;
   title: string;
@@ -23,4 +22,7 @@ export interface ActorMovies {
 
 export interface ActorWithMovies extends ActorData {
   movies: ActorMovies[];
+}
+export interface FilmDetails {
+  film_id: number;
 }

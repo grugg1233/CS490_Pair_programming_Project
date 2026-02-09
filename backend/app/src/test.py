@@ -8,6 +8,7 @@ DB_CONFIG = dict(
     database="sakila",
 )
 
+
 def return_films():
     sql = """
         SELECT
@@ -28,6 +29,7 @@ def return_films():
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql)
             return cursor.fetchall()
+
 
 def return_actors(s_id: int):
     sql = """
@@ -53,7 +55,6 @@ def return_actors(s_id: int):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (s_id,))
             return cursor.fetchall()
-
 
 
 def return_top5films_top5Actors(s_id: int):

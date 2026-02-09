@@ -2,11 +2,13 @@ import type { FilmData } from "../utils/types";
 
 interface FilmCardProps {
   film: FilmData;
+  onClick: (filmId: number) => void;
 }
 
-const Card = ({ film }: FilmCardProps) => {
+const Card = ({ film, onClick }: FilmCardProps) => {
   return (
     <div
+      onClick={() => onClick(film.film_id)}
       className="card  w-64 h-64 shadow-sm  bg-black 
             bg-[radial-gradient(circle_at_top_left,rgba(255,0,0,0.35),transparent_55%)]
             shadow-[0_8px_30px_rgba(0,0,0,0.35)]
