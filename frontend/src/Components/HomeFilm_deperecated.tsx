@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import StyledButton from "./FilmButton";
+import StyledButton from "./FilmButton_deperecated";
 import axios from "axios";
 
 interface FilmInterface {
