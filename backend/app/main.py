@@ -32,7 +32,7 @@ def film_modal_actors(film_id: int):
     return jsonify(t.return_Film_Modal_actors(film_id))
 
 
-@app.route("/customerDelete/<int:customer_id>", methods=["GET"])
+@app.route("/customerDelete/<int:customer_id>", methods=["POST"])
 def delete_cust(customer_id: int):
     return jsonify(t.remove_customer(customer_id))
 
