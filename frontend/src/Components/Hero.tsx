@@ -14,7 +14,7 @@ const Hero = () => {
             just one click away.
           </h1>
 
-          <p className="mt-8 text-[28px] text-gray-300">
+          <p className="mt-6 text-[28px] text-gray-300">
             Browse our collection of classics and discover your next favorite
             film.
           </p>

@@ -103,7 +103,7 @@ const CustomerPagination = () => {
           )}
 
           {totalPages > 1 && (
-            <div className="flex justify-center">
+            <div className="flex justify-center ">
               <div className="join">
                 <button
                   className={`join-item btn btn-ghost ${
