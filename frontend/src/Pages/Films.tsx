@@ -1,3 +1,10 @@
-const Films = () => <h1 className="bg-black">Films</h1>;
+import Navbar from "../Components/Navbar";
+const Films = () =>  {
+return (
+    <>
+        <Navbar />
+    </>
+  );
 
+}; 
 export default Films;
