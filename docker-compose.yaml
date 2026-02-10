@@ -32,15 +32,23 @@ services:
       timeout: 5s
       retries: 10
   server:
-    build: 
+    build:
       context: backend
       dockerfile: Dockerfile
     container_name: sakila-backend
     ports:
       - "8080:8000"
+    volumes:
+      - ./backend:/app
+      - /app/.venv
     depends_on:
       db:
         condition: service_healthy
+    command: >
+      gunicorn
+      --reload
+      --bind 0.0.0.0:8000
+      app.main:app
 
 volumes:
   mysql_data:

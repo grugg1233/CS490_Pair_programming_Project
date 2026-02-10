@@ -14,16 +14,16 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!filmId) return;
+    if (filmId === null) return;
 
     setLoading(true);
     setError(false);
 
     axios
-      .get<FilmDetails>(`http://localhost:8080/filminfo/${filmId}`)
-      .then((res) => {setFilm(res.data);
-                  console.log('data: :', res.data); 
-
+      .get<FilmDetails[]>(`http://localhost:8080/filminfo/${filmId}`)
+      .then((res) => {
+        setFilm(res.data[0]);
+        console.log("data: :", res.data);
       })
       .catch((err) => {
         console.error(err);
@@ -33,7 +33,7 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
   }, [filmId]);
 
   useEffect(() => {
-    if (!filmId) return;
+    if (filmId === null) return;
 
     dialogRef.current?.showModal();
   }, [filmId]);

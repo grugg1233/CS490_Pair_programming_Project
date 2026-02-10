@@ -22,8 +22,8 @@ const HomeFilm = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="bg-black p-6 ">
-      <h1 className="font-bold mb-4 text-[32px]">Top 5 Films</h1>
+    <div className="bg-black pt-12 p-6">
+      <h1 className="font-bold mb-5 text-[32px]">Top 5 Films</h1>
       <div className="flex flex-wrap gap-6 ">
         {films.map((FilmData, index) => {
           const film: FilmData = {
@@ -34,7 +34,7 @@ const HomeFilm = () => {
           };
 
           return (
-            <Card key={film.film_id} film={film} onClick={setSelectedFilmId} />
+            <Card film={film} onClick={setSelectedFilmId} />
           );
         })}
       </div>
@@ -42,6 +42,7 @@ const HomeFilm = () => {
         filmId={selectedFilmId}
         onClose={() => setSelectedFilmId(null)}
       />
+      
     </div>
   );
 };
