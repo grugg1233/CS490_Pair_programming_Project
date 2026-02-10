@@ -17,6 +17,9 @@ const Navbar = () => {
           <li className="text-[18px]">
             <Link to="/films">Films</Link>
           </li>
+          <li className="text-[18px]">
+            <Link to="/customers">Customers</Link>
+          </li>
         </ul>
       </div>
     </div>

@@ -5,10 +5,10 @@ import TopActors from "../Components/TopActors";
 
 export default function Home() {
   return (
-    <>
-      <Navbar></Navbar>
-      <Hero></Hero>
-      <HomeFilm></HomeFilm>
+    <> 
+      <Navbar/>
+      <Hero/>
+      <HomeFilm />
       <TopActors storeId={1} />
     </>
   );

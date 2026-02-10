@@ -148,3 +148,80 @@ def return_Film_Modal_actors(film_id):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (film_id,))
             return cursor.fetchall() 
+
+def get_all_films(): 
+    sql = """
+        select all
+            f.title 
+        from films f
+        ; 
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql)
+            return cursor.fetchall() 
+def get_all_customers(): 
+    sql = """ 
+    select all 
+        c.customer_id ,
+        c.first_name, 
+        c.last_name, 
+        c.email, 
+        A.address  
+    from customer as c 
+        inner join address as A 
+            on c.address_id = A.address_id 
+    where active = 1
+    order by 
+        customer_id asc; 
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql)
+            return cursor.fetchall() 
+
+def remove_customer(c_id): 
+    sql = """ 
+    update customer set active = 0 where customer_id = %s; 
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (c_id, ))
+            return cursor.fetchall() 
+
+
+def add_customer(customer_id, store_id, first_name, last_name, email, address_id, active):
+    sql = """
+    insert into customer
+        %s, %s, %s, %s, %s, %s, %s
+    ; 
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (customer_id, store_id, first_name, last_name, email, address_id, active,))
+            return cursor.fetchall() 
+
+def add_customer_address(address_id, 
+                    address,
+                    address2,
+                    district,
+                    city_id,
+                    postal_code,
+                    phone,
+                    location): 
+    sql = """
+    insert into address
+        %s, %s, %s, %s, %s, %s, %s, %s
+    ; 
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (address_id, 
+                    address,
+                    address2,
+                    district,
+                    city_id,
+                    postal_code,
+                    phone,
+                    location,))
+            return cursor.fetchall() 
