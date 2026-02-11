@@ -248,12 +248,20 @@ def add_customer_address(
 
 
 def return_all_film():
-    sql = """
-        """
-    pass
+    sql = """SELECT 
+                f.film_id,
+                f.title
+            FROM 
+                film f
+            Order By f.title 
+            """
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql)
+            return cursor.fetchall()
 
 
-def return_genre_films():
+def return_genre_films(genre: str):
     sql = """SELECT 
                 f.film_id,
                 f.title
@@ -263,11 +271,11 @@ def return_genre_films():
             ON f.film_id = fc.film_id 
             INNER JOIN category c 
             ON fc.category_id = c.category_id 
-            Where c.name ="Action"
+            Where c.name = %s
             Order By f.title 
         """
-    
+
     with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, (genre,))
             return cursor.fetchall()

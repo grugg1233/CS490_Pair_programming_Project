@@ -73,15 +73,12 @@ def add_cust_post():
 
 @app.route("/filmgenre/<string:genre>", methods=["GET"])
 def return_genre_films(genre: str):
-    if genre == "all":
+    if genre == "All":
         films = t.return_all_film()
+    else:
+        films = t.return_genre_films(genre=genre)
 
     return jsonify(films)
-
-
-@app.route("/filmgenretest", methods=["GET"])
-def filmgenre_test():
-    return jsonify(t.return_genre_films())
 
 
 @app.route("/servertest", methods=["GET"])

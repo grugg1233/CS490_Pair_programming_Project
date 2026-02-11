@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Genre } from "../utils/types";
 import type { FilmData } from "../utils/types";
 import axios from "axios";
@@ -33,9 +33,15 @@ const FilmSearch = () => {
 
   useEffect(() => {
     axios
-      .get<FilmData[]>("http://localhost:8080/filminfo/${filmId}")
+      .get<FilmData[]>(`http://localhost:8080/filmgenre/${genre}`)
       .then((res) => setFilms(res.data));
   }, [genre]);
+
+  useEffect(() => {
+    axios
+      .get<FilmData[]>("http://localhost:8080/filmgenretest")
+      .then((res) => setFilms(res.data));
+  }, [query]);
 
   useEffect(() => {});
 
@@ -88,12 +94,12 @@ const FilmSearch = () => {
         ))}
       </div>
 
-      <div>
-        {films?.map((film)=>
-          <Card film={film} onClick = {setSelectedFilmId}/>
-        )}
+      <div className="p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-12">
+        {films?.map((film) => (
+          <Card film={film} onClick={setSelectedFilmId} showFilmId={false} />
+        ))}
       </div>
-       <FilmModal
+      <FilmModal
         filmId={selectedFilmId}
         onClose={() => setSelectedFilmId(null)}
       />

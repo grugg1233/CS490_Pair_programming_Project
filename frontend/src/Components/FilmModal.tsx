@@ -10,7 +10,7 @@ interface FilmModalProps {
 
 const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
   const [film, setFilm] = useState<FilmDetails | null>(null);
-  const [actors, setFilmActors] = useState<filmActors[]>([]);
+   const [actors, setFilmActors] = useState<filmActors[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
