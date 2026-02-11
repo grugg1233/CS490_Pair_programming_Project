@@ -26,8 +26,8 @@ const Card = ({ film, onClick }: FilmCardProps) => {
           </div>
           <div className="pr-2 absolute bottom-3 left-3 text-left">
             <h2 className="card-title font-bold text-[24px]">{film.title}</h2>
-            <h2>Category: {film.category}</h2>
-            <h2>Rental Count: {film.count}</h2>
+            {film.category && <h2>Category: {film.category}</h2>}
+            {film.count && <h2>Rental Count: {film.count}</h2>}
           </div>
         </div>
       </div>

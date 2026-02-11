@@ -1,10 +1,11 @@
 import Navbar from "../Components/Navbar";
-import CustomerPagination from "../Components/CustomerPagination";
+import CustomersPage from "../Components/CustomerPage";
+
 const Customers = () => {
 return (
     <>
         <Navbar />
-        <CustomerPagination />
+        <CustomersPage />
     </>
   );
 

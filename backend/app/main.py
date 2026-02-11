@@ -1,3 +1,4 @@
+import string
 from app.src import test as t
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -68,6 +69,24 @@ def add_cust_post():
     t.add_customer_address(
         address_id, address, address2, district, city_id, postal_code, phone, location
     )
+
+
+@app.route("/filmgenre/<string:genre>", methods=["GET"])
+def return_genre_films(genre: str):
+    if genre == "all":
+        films = t.return_all_film()
+
+    return jsonify(films)
+
+
+@app.route("/filmgenretest", methods=["GET"])
+def filmgenre_test():
+    return jsonify(t.return_genre_films())
+
+
+@app.route("/servertest", methods=["GET"])
+def test():
+    return "Hello World"
 
 
 if __name__ == "__main__":

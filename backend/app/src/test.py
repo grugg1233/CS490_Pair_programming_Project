@@ -105,6 +105,7 @@ def return_top5films_top5Actors(s_id: int):
             cursor.execute(sql, (s_id, s_id))
             return cursor.fetchall()
 
+
 def return_Film_Modal_Info(film_id):
     sql = """
         select 
@@ -125,11 +126,12 @@ def return_Film_Modal_Info(film_id):
         ;
 
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (film_id,))
-            return cursor.fetchall() 
-        
+            return cursor.fetchall()
+
+
 def return_Film_Modal_actors(film_id):
     sql = """
         select
@@ -144,23 +146,26 @@ def return_Film_Modal_actors(film_id):
         order by last_name desc
         ;      
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (film_id,))
-            return cursor.fetchall() 
+            return cursor.fetchall()
 
-def get_all_films(): 
+
+def get_all_films():
     sql = """
         select all
             f.title 
         from films f
         ; 
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql)
-            return cursor.fetchall() 
-def get_all_customers(): 
+            return cursor.fetchall()
+
+
+def get_all_customers():
     sql = """ 
     select all 
         c.customer_id ,
@@ -175,53 +180,94 @@ def get_all_customers():
     order by 
         customer_id asc; 
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql)
-            return cursor.fetchall() 
+            return cursor.fetchall()
 
-def remove_customer(c_id): 
+
+def remove_customer(c_id):
     sql = """ 
     update customer set active = 0 where customer_id = %s; 
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql, (c_id, ))
-            return cursor.fetchall() 
+            cursor.execute(sql, (c_id,))
+            return cursor.fetchall()
 
 
-def add_customer(customer_id, store_id, first_name, last_name, email, address_id, active):
+def add_customer(
+    customer_id, store_id, first_name, last_name, email, address_id, active
+):
     sql = """
     insert into customer
         %s, %s, %s, %s, %s, %s, %s
     ; 
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql, (customer_id, store_id, first_name, last_name, email, address_id, active,))
-            return cursor.fetchall() 
+            cursor.execute(
+                sql,
+                (
+                    customer_id,
+                    store_id,
+                    first_name,
+                    last_name,
+                    email,
+                    address_id,
+                    active,
+                ),
+            )
+            return cursor.fetchall()
 
-def add_customer_address(address_id, 
-                    address,
-                    address2,
-                    district,
-                    city_id,
-                    postal_code,
-                    phone,
-                    location): 
+
+def add_customer_address(
+    address_id, address, address2, district, city_id, postal_code, phone, location
+):
     sql = """
     insert into address
         %s, %s, %s, %s, %s, %s, %s, %s
     ; 
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
+    with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql, (address_id, 
+            cursor.execute(
+                sql,
+                (
+                    address_id,
                     address,
                     address2,
                     district,
                     city_id,
                     postal_code,
                     phone,
-                    location,))
-            return cursor.fetchall() 
+                    location,
+                ),
+            )
+            return cursor.fetchall()
+
+
+def return_all_film():
+    sql = """
+        """
+    pass
+
+
+def return_genre_films():
+    sql = """SELECT 
+                f.film_id,
+                f.title
+            FROM 
+                film f
+            INNER JOIN film_category fc 
+            ON f.film_id = fc.film_id 
+            INNER JOIN category c 
+            ON fc.category_id = c.category_id 
+            Where c.name ="Action"
+            Order By f.title 
+        """
+    
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql)
+            return cursor.fetchall()
