@@ -46,30 +46,21 @@ def get_customers():
 @app.route("/addCustomer", methods=["POST"])
 def add_cust_post():
     # customer table information
-    customer_id = request.form.get("customer_id")
-    store_id = request.form.get("store_id")
     first_name = request.form.get("first_name")
     last_name = request.form.get("last_name")
     email = request.form.get("email")
-    address_id = request.form.get("address_id")
-    active = request.form.get("active")
-
     # customer address information
     address = request.form.get("address")
-    address2 = request.form.get("address2")
     district = request.form.get("district")
-    city_id = request.form.get("city_id")
+    city = request.form.get("city")
     postal_code = request.form.get("postal_code")
     phone = request.form.get("phone")
-    location = request.form.get("location")
-
-    t.add_customer(
-        customer_id, store_id, first_name, last_name, email, address_id, active
-    )
-    t.add_customer_address(
-        address_id, address, address2, district, city_id, postal_code, phone, location
-    )
-
+    if  t.add_customer_address(address, district, city , phone,postal_code ):
+        t.add_customer(
+            first_name, last_name, email,  phone
+        )
+    else: 
+        return "ERROR - adding address failed "
 
 @app.route("/filmgenre/<string:genre>", methods=["GET"])
 def return_genre_films(genre: str):
