@@ -24,6 +24,7 @@ export interface ActorMovies {
 export interface ActorWithMovies extends ActorData {
   movies: ActorMovies[];
 }
+
 export interface FilmDetails {
   description: string;
   length: number;

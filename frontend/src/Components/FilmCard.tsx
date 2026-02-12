@@ -2,8 +2,8 @@ import type { FilmData } from "../utils/types";
 
 interface FilmCardProps {
   film: FilmData;
-  onClick: (filmId: number | null) => void;
   showFilmId: boolean;
+  onClick: (filmId: number) => void;
 }
 
 const Card = ({ film, onClick, showFilmId }: FilmCardProps) => {
