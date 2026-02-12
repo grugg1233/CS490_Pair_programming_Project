@@ -3,6 +3,7 @@ export interface FilmData {
   title: string;
   category: string | null;
   count: number | null;
+  rank: number; 
 }
 
 export interface ActorData {
