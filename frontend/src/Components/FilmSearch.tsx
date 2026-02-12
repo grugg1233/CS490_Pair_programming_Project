@@ -4,26 +4,7 @@ import type { FilmData } from "../utils/types";
 import axios from "axios";
 import Card from "./FilmCard";
 import FilmModal from "./FilmModal";
-
-const genres: Genre[] = [
-  { id: "0", name: "All" },
-  { id: "1", name: "Action" },
-  { id: "2", name: "Animation" },
-  { id: "3", name: "Children" },
-  { id: "4", name: "Classics" },
-  { id: "5", name: "Comedy" },
-  { id: "6", name: "Documentary" },
-  { id: "7", name: "Drama" },
-  { id: "8", name: "Family" },
-  { id: "9", name: "Foreign" },
-  { id: "10", name: "Games" },
-  { id: "11", name: "Horror" },
-  { id: "12", name: "Music" },
-  { id: "13", name: "New" },
-  { id: "14", name: "Sci-Fi" },
-  { id: "15", name: "Sports" },
-  { id: "16", name: "Travel" },
-];
+import { genres } from "../utils/types";
 
 const FilmSearch = () => {
   const [genre, setGenre] = useState<Genre>(genres[0]);
