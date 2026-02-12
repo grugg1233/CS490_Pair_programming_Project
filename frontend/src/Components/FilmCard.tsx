@@ -22,7 +22,7 @@ const Card = ({ film, onClick }: FilmCardProps) => {
             rounded-full bg-red-600
             text-[18px] font-bold text-white"
           >
-            {film.film_id}
+            {film.rank}
           </div>
           <div className="pr-2 absolute bottom-3 left-3 text-left">
             <h2 className="card-title font-bold text-[24px]">{film.title}</h2>

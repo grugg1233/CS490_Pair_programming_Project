@@ -27,10 +27,11 @@ const HomeFilm = () => {
       <div className="flex flex-wrap gap-6 ">
         {films.map((FilmData, index) => {
           const film: FilmData = {
-            film_id: index + 1,
+            film_id: FilmData.film_id,
             title: FilmData.title,
             category: FilmData.category,
             count: FilmData.count,
+            rank: index+1,
           };
 
           return (
