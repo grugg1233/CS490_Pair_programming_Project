@@ -2,7 +2,7 @@ import type { AllCustomers } from "../utils/types";
 import PaginationControls from "./CustomerPagination";
 import { useMemo } from "react";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 21;
 
 const CustomersGrid = ({
   customers,

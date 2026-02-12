@@ -1,5 +1,5 @@
 export interface FilmData {
-  film_id: number;
+  film_id: number | null;
   title: string;
   category: string | null;
   count: number | null;

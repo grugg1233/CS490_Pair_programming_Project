@@ -35,7 +35,7 @@ const HomeFilm = () => {
           };
 
           return (
-            <Card film={film} onClick={setSelectedFilmId} />
+            <Card film={film} onClick={setSelectedFilmId} showFilmId={true}/>
           );
         })}
       </div>

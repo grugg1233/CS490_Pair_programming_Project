@@ -2,10 +2,11 @@ import type { FilmData } from "../utils/types";
 
 interface FilmCardProps {
   film: FilmData;
-  onClick: (filmId: number) => void;
+  onClick: (filmId: number | null) => void;
+  showFilmId : boolean;
 }
 
-const Card = ({ film, onClick }: FilmCardProps) => {
+const Card = ({ film, onClick, showFilmId}: FilmCardProps) => {
   return (
     <div className="justify-center flex w-full md:block md:w-auto lg:block lg:w-auto">
       <div
@@ -16,6 +17,7 @@ const Card = ({ film, onClick }: FilmCardProps) => {
             ring-1 ring-white/20"
       >
         <div className="card-body">
+          { showFilmId &&
           <div
             className="absolute top-3 left-3 
             flex h-10 w-10 items-center justify-center
