@@ -197,55 +197,63 @@ def remove_customer(c_id):
 
 
 def add_customer(
-    customer_id, store_id, first_name, last_name, email, address_id, active
+     first_name, last_name, email,  phone
 ):
-    sql = """
-    insert into customer
-        %s, %s, %s, %s, %s, %s, %s
-    ; 
-    """
-    with connecter.connect(**DB_CONFIG) as connection:
-        with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(
-                sql,
-                (
-                    customer_id,
-                    store_id,
-                    first_name,
-                    last_name,
-                    email,
-                    address_id,
-                    active,
-                ),
-            )
-            return cursor.fetchall()
+    try:
+        sql = """
+            insert into customer (store_id, first_name, last_name, email, active, address_id)
+                values(1,
+                    %s, 
+                    %s,
+                    %s,
+                    1,
+                    (select address_id from address where phone=%s)
+            ); 
+        ; 
+        """
+        with connecter.connect(**DB_CONFIG) as connection:
+            with connection.cursor(dictionary=True) as cursor:
+                cursor.execute(
+                    sql,
+                    (
+                    first_name, last_name, email,  phone,
+                    ),
+                )
+        return True
+    except: 
+        return False
+    
 
+    
 
 def add_customer_address(
-    address_id, address, address2, district, city_id, postal_code, phone, location
+    address, district, city , phone,postal_code 
 ):
-    sql = """
-    insert into address
-        %s, %s, %s, %s, %s, %s, %s, %s
-    ; 
-    """
-    with connecter.connect(**DB_CONFIG) as connection:
-        with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(
-                sql,
-                (
-                    address_id,
-                    address,
-                    address2,
-                    district,
-                    city_id,
-                    postal_code,
-                    phone,
-                    location,
-                ),
-            )
-            return cursor.fetchall()
+    try:
+        sql = """
+            insert into address (address, address2, district, city_id , phone, location, postal_code )
+            values (%s,
+                    null,
+                    %s,
+                    (select city_id from city c where c.city=%s), 
+                    %s, 
+                    ST_GeomFromText('POINT(0.0 0.0)', 0),
+                    %s
+            ); 
+        """
+        with connecter.connect(**DB_CONFIG) as connection:
+            with connection.cursor(dictionary=True) as cursor:
+                cursor.execute(
+                    sql,
+                    (
+                        address, district, city , phone, postal_code,
+                    ),
+                )
 
+            return True
+    except: 
+        return False
+    
 
 def return_all_film():
     sql = """SELECT 

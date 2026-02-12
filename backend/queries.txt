@@ -210,3 +210,36 @@ order by last_name desc
 select special_features from film where film_id =1; -- "behind the scenes"
 select description from film where film_id =1; -- "this movie is about xyz"
 select rating from film where film_id =1; -- pg / g / R 
+
+
+
+-- delete from customer c where c.customer_id = 1;
+select country from country;  
+select location from address; 
+select phone from address; 
+select postal_code from address; 
+insert into address (address, address2, district, city_id , phone, location, postal_code )
+values ("Edison st.",
+		null,
+		"middletown",
+		(select city_id from city c where c.city="York"), 
+		"5512305018", 
+		ST_GeomFromText('POINT(40.7128 -74.0060)', 0),
+		35200
+); 
+
+select address_id from address where phone="5512305018"
+
+insert into customer (store_id, first_name, last_name, email, active, address_id)
+	values(1,
+		"rishik", 
+		"yesgari",
+		"rsy@jit.edu",
+		1,
+		(select address_id from address where phone="5512305018")
+); 
+
+
+
+
+select * from customer where first_name="rishik"; 
