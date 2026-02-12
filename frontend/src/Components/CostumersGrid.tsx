@@ -10,12 +10,14 @@ const CustomersGrid = ({
   error,
   page,
   setPage,
+  onClick,
 }: {
   customers: AllCustomers[];
   loading: boolean;
   error: string;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  onClick: (id: number) => void;
 }) => {
   const totalPages = Math.max(1, Math.ceil(customers.length / PAGE_SIZE));
   const startIndex = (page - 1) * PAGE_SIZE;
@@ -50,7 +52,11 @@ const CustomersGrid = ({
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         {visible.map((c) => (
-          <CustomerCard key={c.customer_id} customer={c} />
+          <CustomerCard
+            key={c.customer_id}
+            customer={c}
+            onClick={() => onClick(c.customer_id)}
+          />
         ))}
       </div>
 
@@ -66,9 +72,18 @@ const CustomersGrid = ({
   );
 };
 
-const CustomerCard = ({ customer }: { customer: AllCustomers }) => (
-  <div className="p-6 rounded-xl bg-zinc-900 border border-white/10">
-    <h3 className="text-lg font-semibold">
+const CustomerCard = ({
+  customer,
+  onClick,
+}: {
+  customer: AllCustomers;
+  onClick: () => void;
+}) => (
+  <div
+    onClick={onClick}
+    className="p-6 rounded-xl bg-zinc-900 border border-white/10"
+  >
+    <h3 className="text-lg o o o o o font-semibold">
       {customer.first_name} {customer.last_name}
     </h3>
     <p className="text-sm text-white/60">{customer.email}</p>

@@ -45,9 +45,6 @@ const ActorModal = ({ actor }: ActorModalProps) => {
               <h3 className="text-2xl font-bold tracking-wide">
                 {actor.first_name} {actor.last_name}
               </h3>
-              <p className="mt-1 text-white/70 flex items-center gap-2">
-                {actor.movies.length} films in catalog
-              </p>
             </div>
           </div>
         </div>

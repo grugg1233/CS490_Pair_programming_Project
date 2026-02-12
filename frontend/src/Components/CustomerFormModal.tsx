@@ -1,34 +1,24 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import AddUserForm from "./AddUserForm";
 
-const CustomerModal = ({
-  customer_id,
+const AddCustomerModal = ({
   open,
   onClose,
 }: {
-  customer_id: number;
   open: boolean;
   onClose: () => void;
 }) => {
-
-    const [customer, setCustomer] = useState();
-    
-    useEffect(()=>{
-        axios
-        .get(`http://localhost:8080/customers/${customer_id}`)
-        .then((res)=>setCustomer(res.data))
-    }, [open, customer_id]);
-
   if (!open) return null;
+
   return (
     <dialog
       open
       className="modal modal-middle w-100vh h-100vh backdrop-blur-[8px]"
     >
       <div className="modal-box bg-zinc-900 text-white border border-white/10">
+        <AddUserForm />
         <div className="modal-action">
           <button
-            className="btn  btn-ghost w-6 h-6 rounded-full absolute top-7 right-6"
+            className="btn btn-ghost w-6 h-6 rounded-full absolute top-7 right-6"
             onClick={onClose}
           >
             <svg
@@ -53,4 +43,4 @@ const CustomerModal = ({
   );
 };
 
-export default CustomerModal;
+export default AddCustomerModal;

@@ -14,17 +14,9 @@ const FilmSearch = () => {
 
   useEffect(() => {
     axios
-      .get<FilmData[]>(`http://localhost:8080/filmgenre/${genre}`)
+      .get<FilmData[]>(`http://localhost:8080/filmgenre/${genre.name}`)
       .then((res) => setFilms(res.data));
   }, [genre]);
-
-  useEffect(() => {
-    axios
-      .get<FilmData[]>("http://localhost:8080/filmgenretest")
-      .then((res) => setFilms(res.data));
-  }, [query]);
-
-  useEffect(() => {});
 
   return (
     <section className="parent-section pt-12 bg-black block space-y-8 p-12">
@@ -64,13 +56,19 @@ const FilmSearch = () => {
       </form>
 
       <div className="flex flex-wrap items-center p-4 gap-4 justify-start items-start">
-        {genres.map((genre) => (
+        {genres.map((g) => (
           <button
-            key={genre.id}
-            onClick={() => setGenre(genre)}
-            className="btn bg-gray-500/50 w-auto p-3 rounded-lg"
+            key={g.id}
+            onClick={() => setGenre(g)}
+            className={`w-auto px-3 py-2 rounded-lg 
+                        ${
+                          genre.id === g.id
+                            ? "bg-red-600 text-white"
+                            : "bg-gray-500/50 text-white"
+                        }
+                      `}
           >
-            {genre.name}
+            {g.name}
           </button>
         ))}
       </div>
