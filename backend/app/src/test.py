@@ -287,3 +287,22 @@ def return_genre_films(genre: str):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (genre,))
             return cursor.fetchall()
+
+
+def spec_customer(customer_id): 
+    sql = """
+    select  
+        c.customer_id ,
+        c.first_name, 
+        c.last_name, 
+        c.email, 
+        A.address  
+    from customer as c 
+        inner join address as A 
+            on c.address_id = A.address_id 
+    where c.cutomer_id = %s
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor: 
+            cursor.execute(sql, (customer_id, ))
+            return cursor.fetchall()

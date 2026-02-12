@@ -42,6 +42,10 @@ def delete_cust(customer_id: int):
 def get_customers():
     return jsonify(t.get_all_customers())
 
+@app.route("/customers/<customer_id:int>", methods=["GET"])
+def spec_customer(customer_id):
+    return jsonify(t.spec_customer(customer_id))
+
 
 @app.route("/addCustomer", methods=["POST"])
 def add_cust_post():
