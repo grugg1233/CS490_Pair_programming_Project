@@ -187,14 +187,17 @@ def get_all_customers():
 
 
 def remove_customer(c_id):
-    sql = """ 
-    update customer set active = 0 where customer_id = %s; 
-    """
-    with connecter.connect(**DB_CONFIG) as connection:
-        with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql, (c_id,))
-            return cursor.fetchall()
+    try:
+        sql = """ 
+        update customer set active = 0 where customer_id = %s; 
+        """
 
+        with connecter.connect(**DB_CONFIG) as connection:
+            with connection.cursor(dictionary=True) as cursor:
+                cursor.execute(sql, (c_id,))
+        return True
+    except: 
+        return False
 
 def add_customer(
      first_name, last_name, email,  phone
@@ -292,15 +295,21 @@ def return_genre_films(genre: str):
 def spec_customer(customer_id): 
     sql = """
     select  
-        c.customer_id ,
         c.first_name, 
         c.last_name, 
         c.email, 
-        A.address  
+        A.address,
+        ci.city
+        co.country
+        A.phone
     from customer as c 
         inner join address as A 
             on c.address_id = A.address_id 
-    where c.cutomer_id = %s
+        inner join city as ci
+            on A.city_id = ci.city_id 
+        inner join country as co
+            on ci.country_id = co.country_id
+    where c.customer_id = %s
     """
     with connecter.connect(**DB_CONFIG) as connection: 
         with connection.cursor(dictionary=True) as cursor: 

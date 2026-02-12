@@ -63,6 +63,16 @@ export interface Pagination {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
+export interface CustModalData {
+    first_name: string;
+    last_name: string; 
+    email: string; 
+    address: string; 
+    city: string;
+    country: string; 
+    phone: string; 
+}
+
 export const genres: Genre[] = [
   { id: "0", name: "All" },
   { id: "1", name: "Action" },

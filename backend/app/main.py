@@ -33,16 +33,18 @@ def film_modal_actors(film_id: int):
     return jsonify(t.return_Film_Modal_actors(film_id))
 
 
-@app.route("/customerDelete/<int:customer_id>", methods=["POST"])
-def delete_cust(customer_id: int):
-    return jsonify(t.remove_customer(customer_id))
+@app.route("/customerDelete/<int:customer_id>", methods=["GET","POST"])
+def delete_cust(customer_id: int): 
+    b = t.remove_customer(customer_id)
+    if not b:
+        return f"ERROR - removing customer with customer id {customer_id}"
 
 
 @app.route("/customersAll", methods=["GET"])
 def get_customers():
     return jsonify(t.get_all_customers())
 
-@app.route("/customers/<customer_id:int>", methods=["GET"])
+@app.route("/customers/<int:customer_id>", methods=["GET"])
 def spec_customer(customer_id):
     return jsonify(t.spec_customer(customer_id))
 
