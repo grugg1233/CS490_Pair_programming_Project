@@ -17,7 +17,7 @@ const Card = ({ film, onClick, showFilmId}: FilmCardProps) => {
             ring-1 ring-white/20"
       >
         <div className="card-body">
-          { showFilmId &&
+          { showFilmId && ( 
           <div
             className="absolute top-3 left-3 
             flex h-10 w-10 items-center justify-center
@@ -26,7 +26,8 @@ const Card = ({ film, onClick, showFilmId}: FilmCardProps) => {
           >
             {film.rank}
           </div>
-          <div className="pr-2 absolute bottom-3 left-3 text-left">
+          )}
+        <div className="pr-2 absolute bottom-3 left-3 text-left">
             <h2 className="card-title font-bold text-[24px]">{film.title}</h2>
             {film.category && <h2>Category: {film.category}</h2>}
             {film.count && <h2>Rental Count: {film.count}</h2>}
@@ -34,6 +35,7 @@ const Card = ({ film, onClick, showFilmId}: FilmCardProps) => {
         </div>
       </div>
     </div>
+    
   );
 };
 
