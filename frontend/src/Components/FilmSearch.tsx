@@ -18,6 +18,12 @@ const FilmSearch = () => {
       .then((res) => setFilms(res.data));
   }, [genre]);
 
+  useEffect(() => {
+    axios
+      .get<FilmData[]>(`http://localhost:8080/searchfilms/${query}`)
+      .then((res) => setFilms(res.data));
+  }, [query]);
+
   return (
     <section className="parent-section pt-12 bg-black block space-y-8 p-12">
       {/* got this from flowbite */}

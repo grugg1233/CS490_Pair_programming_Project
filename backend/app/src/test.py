@@ -219,19 +219,18 @@ def add_customer(
                 cursor.execute(
                     sql,
                     (
-                    first_name, last_name, email,  phone,
+                        first_name,
+                        last_name,
+                        email,
+                        phone,
                     ),
                 )
         return True
-    except: 
+    except:
         return False
-    
 
-    
 
-def add_customer_address(
-    address, district, city , phone,postal_code 
-):
+def add_customer_address(address, district, city, phone, postal_code):
     try:
         sql = """
             insert into address (address, address2, district, city_id , phone, location, postal_code )
@@ -249,14 +248,18 @@ def add_customer_address(
                 cursor.execute(
                     sql,
                     (
-                        address, district, city , phone, postal_code,
+                        address,
+                        district,
+                        city,
+                        phone,
+                        postal_code,
                     ),
                 )
 
             return True
-    except: 
+    except:
         return False
-    
+
 
 def return_all_film():
     sql = """SELECT 
@@ -290,6 +293,59 @@ def return_genre_films(genre: str):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (genre,))
             return cursor.fetchall()
+
+
+def search_films(query: str):
+    sql = """
+        SELECT DISTINCT
+            f.film_id,
+            f.title
+        FROM film f
+        JOIN film_category fc ON f.film_id = fc.film_id
+        JOIN category c ON fc.category_id = c.category_id
+        JOIN film_actor fa ON f.film_id = fa.film_id
+        JOIN actor a ON fa.actor_id = a.actor_id
+        WHERE 
+            f.title LIKE %s
+            OR c.name LIKE %s
+            OR a.first_name LIKE %s
+            OR a.last_name LIKE %s
+        ORDER BY f.title;
+    """
+
+    search = f"%{query}%"
+
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (search, search, search, search))
+            return cursor.fetchall()
+
+
+def spec_customer(customer_id): 
+    sql = """
+    select  
+        c.first_name, 
+        c.last_name, 
+        c.email, 
+        ci.city,
+        co.country,
+        A.address,
+        A.phone
+    from customer as c 
+        inner join address as A 
+            on c.address_id = A.address_id 
+        inner join city as ci
+            on A.city_id = ci.city_id 
+        inner join country as co
+            on ci.country_id = co.country_id
+    where c.customer_id = %s
+    """
+    with connecter.connect(**DB_CONFIG) as connection: 
+        with connection.cursor(dictionary=True) as cursor: 
+            cursor.execute(sql, (customer_id, ))
+            return cursor.fetchall()
+
+
 
 
 def spec_customer(customer_id): 

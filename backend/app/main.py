@@ -61,12 +61,11 @@ def add_cust_post():
     city = request.form.get("city")
     postal_code = request.form.get("postal_code")
     phone = request.form.get("phone")
-    if  t.add_customer_address(address, district, city , phone,postal_code ):
-        t.add_customer(
-            first_name, last_name, email,  phone
-        )
-    else: 
+    if t.add_customer_address(address, district, city, phone, postal_code):
+        t.add_customer(first_name, last_name, email, phone)
+    else:
         return "ERROR - adding address failed "
+
 
 @app.route("/filmgenre/<string:genre>", methods=["GET"])
 def return_genre_films(genre: str):
@@ -81,6 +80,11 @@ def return_genre_films(genre: str):
 @app.route("/servertest", methods=["GET"])
 def test():
     return "Hello World"
+
+
+@app.route("/searchfilms/<string:query>", methods=["GET"])
+def return_search_film(query: str):
+    return jsonify(t.search_films(query))
 
 
 if __name__ == "__main__":
