@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import type { CustModalData } from "../utils/types";
 const CustomerModal = ({
   customer_id,
   open,
@@ -11,12 +11,15 @@ const CustomerModal = ({
   onClose: () => void;
 }) => {
 
-    const [customer, setCustomer] = useState();
+    const [customer, setCustomer] = useState<CustModalData>();
     
     useEffect(()=>{
         axios
-        .get(`http://localhost:8080/customers/${customer_id}`)
-        .then((res)=>setCustomer(res.data))
+        .get<CustModalData[]>(`http://localhost:8080/customers/${customer_id}`)
+        .then((res)=> {
+          setCustomer(res.data[0]);
+          console.log(res.data);
+        })
     }, [open, customer_id]);
 
   if (!open) return null;
@@ -43,10 +46,12 @@ const CustomerModal = ({
               stroke-linejoin="round"
               className="lucide lucide-x"
             >
+              
               <path d="M18 6 6 18"></path>
               <path d="m6 6 12 12"></path>
             </svg>
           </button>
+          {customer && <h2> {customer.first_name}</h2>}
         </div>
       </div>
     </dialog>

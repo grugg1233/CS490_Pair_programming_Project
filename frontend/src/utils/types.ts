@@ -4,7 +4,7 @@ export interface FilmData {
   category: string | null;
   count: number | null;
   rank: number; 
-}
+}; 
 
 export interface ActorData {
   actor_id: number;
@@ -13,17 +13,17 @@ export interface ActorData {
   store_id: number;
   address: string;
   count: number;
-}
+}; 
 
 export interface ActorMovies {
   actor_id: number;
   title: string;
   rental_count: number;
-}
+}; 
 
 export interface ActorWithMovies extends ActorData {
   movies: ActorMovies[];
-}
+}; 
 
 export interface FilmDetails {
   description: string;
@@ -34,12 +34,12 @@ export interface FilmDetails {
   rental_duration: number;
   rental_rate: string;
   title: string; //movie title
-}
+};
 
 export interface filmActors {
   first_name: string;
   last_name: string;
-}
+}; 
 
 export interface AllCustomers {
   customer_id: number;
@@ -47,7 +47,7 @@ export interface AllCustomers {
   last_name: string;
   email: string;
   address: string;
-}
+}; 
 
 export type Genre = {
   id: string;
@@ -61,7 +61,7 @@ export interface Pagination {
   canNext: boolean;
   pageNumbers: number[];
   setPage: React.Dispatch<React.SetStateAction<number>>;
-}
+}; 
 
 export interface CustModalData {
     first_name: string;
@@ -71,7 +71,7 @@ export interface CustModalData {
     city: string;
     country: string; 
     phone: string; 
-}
+}; 
 
 export const genres: Genre[] = [
   { id: "0", name: "All" },

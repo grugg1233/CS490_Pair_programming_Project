@@ -298,9 +298,9 @@ def spec_customer(customer_id):
         c.first_name, 
         c.last_name, 
         c.email, 
+        ci.city,
+        co.country,
         A.address,
-        ci.city
-        co.country
         A.phone
     from customer as c 
         inner join address as A 
