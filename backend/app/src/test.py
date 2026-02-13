@@ -195,13 +195,13 @@ def remove_customer(c_id):
         with connecter.connect(**DB_CONFIG) as connection:
             with connection.cursor(dictionary=True) as cursor:
                 cursor.execute(sql, (c_id,))
+            connection.commit()
         return True
-    except: 
+    except:
         return False
 
-def add_customer(
-     first_name, last_name, email,  phone
-):
+
+def add_customer(first_name, last_name, email, phone):
     try:
         sql = """
             insert into customer (store_id, first_name, last_name, email, active, address_id)
@@ -225,6 +225,7 @@ def add_customer(
                         phone,
                     ),
                 )
+            connection.commit()
         return True
     except:
         return False
@@ -255,6 +256,7 @@ def add_customer_address(address, district, city, phone, postal_code):
                         postal_code,
                     ),
                 )
+            connection.commit()
 
             return True
     except:
@@ -297,7 +299,7 @@ def return_genre_films(genre: str):
 
 def search_films(query: str):
     sql = """
-        SELECT DISTINCT
+        SELECT
             f.film_id,
             f.title
         FROM film f
@@ -321,7 +323,7 @@ def search_films(query: str):
             return cursor.fetchall()
 
 
-def spec_customer(customer_id): 
+def spec_customer(customer_id):
     sql = """
     select  
         c.first_name, 
@@ -340,34 +342,34 @@ def spec_customer(customer_id):
             on ci.country_id = co.country_id
     where c.customer_id = %s
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
-        with connection.cursor(dictionary=True) as cursor: 
-            cursor.execute(sql, (customer_id, ))
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (customer_id,))
             return cursor.fetchall()
 
 
-
-
-def spec_customer(customer_id): 
+def search_customer(query: str):
     sql = """
-    select  
-        c.first_name, 
-        c.last_name, 
-        c.email, 
-        ci.city,
-        co.country,
-        A.address,
-        A.phone
-    from customer as c 
-        inner join address as A 
-            on c.address_id = A.address_id 
-        inner join city as ci
-            on A.city_id = ci.city_id 
-        inner join country as co
-            on ci.country_id = co.country_id
-    where c.customer_id = %s
+        SELECT 
+            c.customer_id,
+            c.first_name,
+            c.last_name,
+            c.email,
+            a.address
+        FROM customer c
+        INNER JOIN address a ON c.address_id = a.address_id
+        WHERE c.active = 1
+        AND (
+              c.first_name LIKE %s
+              OR c.last_name LIKE %s
+              OR c.customer_id = %s
+        )
+        ORDER BY c.customer_id asc;
     """
-    with connecter.connect(**DB_CONFIG) as connection: 
-        with connection.cursor(dictionary=True) as cursor: 
-            cursor.execute(sql, (customer_id, ))
+
+    search = f"%{query}%"
+
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (search, search, search))
             return cursor.fetchall()

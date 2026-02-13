@@ -5,10 +5,12 @@ const CustomerModal = ({
   customer_id,
   open,
   onClose,
+  onDelete,
 }: {
   customer_id: number;
   open: boolean;
   onClose: () => void;
+  onDelete: (customer_id: number) => void;
 }) => {
   const [customer, setCustomer] = useState<CustModalData>();
 
@@ -30,7 +32,7 @@ const CustomerModal = ({
       <div
         className="modal-box bg-zinc-900 text-white border border-white/10
        bg-[radial-gradient(circle_at_top_left,rgba(180,210,255,0.2),transparent_35%)]
-        bg-[radial-gradient(circle_at_bottom_right,rgba(180,210,255,0.2),transparent_65%)]
+        bg-[radial-gradient(circle_at_bottom_right,rgba(180,210,255,0.2),transparent_45%)]
             shadow-[0_8px_30px_rgba(0,0,0,0.35)]
             ring-2 ring-white/30
        
@@ -90,6 +92,15 @@ const CustomerModal = ({
             </div>
           </div>
         )}
+
+        <button
+          onClick={() => {
+            onDelete(customer_id);
+          }}
+          className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-8 w-full font-bold"
+        >
+          Delete Customer
+        </button>
       </div>
     </dialog>
   );

@@ -33,16 +33,19 @@ def film_modal_actors(film_id: int):
     return jsonify(t.return_Film_Modal_actors(film_id))
 
 
-@app.route("/customerDelete/<int:customer_id>", methods=["GET","POST"])
-def delete_cust(customer_id: int): 
+@app.route("/customerDelete/<int:customer_id>", methods=["GET", "POST"])
+def delete_cust(customer_id: int):
     b = t.remove_customer(customer_id)
     if not b:
         return f"ERROR - removing customer with customer id {customer_id}"
+    else:
+        return jsonify({"success": True})
 
 
 @app.route("/customersAll", methods=["GET"])
 def get_customers():
     return jsonify(t.get_all_customers())
+
 
 @app.route("/customers/<int:customer_id>", methods=["GET"])
 def spec_customer(customer_id):
@@ -63,6 +66,7 @@ def add_cust_post():
     phone = request.form.get("phone")
     if t.add_customer_address(address, district, city, phone, postal_code):
         t.add_customer(first_name, last_name, email, phone)
+        return jsonify({"success": True})
     else:
         return "ERROR - adding address failed "
 
@@ -85,6 +89,11 @@ def test():
 @app.route("/searchfilms/<string:query>", methods=["GET"])
 def return_search_film(query: str):
     return jsonify(t.search_films(query))
+
+
+@app.route("/searchcustomers/<string:query>", methods=["GET"])
+def return_search_customers(query: str):
+    return jsonify(t.search_customer(query))
 
 
 if __name__ == "__main__":
