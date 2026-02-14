@@ -233,34 +233,38 @@ def add_customer(first_name, last_name, email, phone):
 
 def add_customer_address(address, district, city, phone, postal_code):
     try:
-        sql = """
-            insert into address (address, address2, district, city_id , phone, location, postal_code )
-            values (%s,
-                    null,
-                    %s,
-                    (select city_id from city c where c.city=%s), 
-                    %s, 
-                    ST_GeomFromText('POINT(0.0 0.0)', 0),
-                    %s
-            ); 
-        """
         with connecter.connect(**DB_CONFIG) as connection:
-            with connection.cursor(dictionary=True) as cursor:
-                cursor.execute(
-                    sql,
-                    (
-                        address,
-                        district,
-                        city,
-                        phone,
-                        postal_code,
-                    ),
-                )
-            connection.commit()
+            with connection.cursor() as cursor:
 
-            return True
-    except:
+                cursor.execute(
+                    """
+                    INSERT INTO city (city, country_id)
+                    VALUES (%s, 103)
+                    ON DUPLICATE KEY UPDATE city_id = LAST_INSERT_ID(city_id)
+                    """,
+                    (city,)
+                )
+                city_id = cursor.lastrowid
+
+                
+                cursor.execute(
+                    """
+                    INSERT INTO address
+                        (address, address2, district, city_id, phone, location, postal_code)
+                    VALUES
+                        (%s, NULL, %s, %s, %s, ST_GeomFromText('POINT(0.0 0.0)', 0), %s)
+                    """,
+                    (address, district, city_id, phone, postal_code)
+                )
+
+            connection.commit()
+        return True
+
+    except Exception as e:
+        # don't swallow errors during development
+        print("add_customer_address failed:", e)
         return False
+
 
 
 def return_all_film():
