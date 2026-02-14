@@ -261,7 +261,6 @@ def add_customer_address(address, district, city, phone, postal_code):
         return True
 
     except Exception as e:
-        # don't swallow errors during development
         print("add_customer_address failed:", e)
         return False
 
