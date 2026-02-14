@@ -15,7 +15,7 @@ const AddCustomerModal = ({
       className="modal modal-middle w-100vh h-100vh backdrop-blur-[8px]"
     >
       <div className="modal-box bg-zinc-900 text-white border border-white/10">
-        <AddUserForm />
+        <AddUserForm onSuccess={onClose} />
         <div className="modal-action">
           <button
             className="btn btn-ghost w-6 h-6 rounded-full absolute top-7 right-6"

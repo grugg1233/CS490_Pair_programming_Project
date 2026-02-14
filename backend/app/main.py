@@ -1,5 +1,5 @@
 import string
-from app.src import test as t
+from app.src import queries as t
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -55,15 +55,18 @@ def spec_customer(customer_id):
 @app.route("/addCustomer", methods=["POST"])
 def add_cust_post():
     # customer table information
-    first_name = request.form.get("first_name")
-    last_name = request.form.get("last_name")
-    email = request.form.get("email")
-    # customer address information
-    address = request.form.get("address")
-    district = request.form.get("district")
-    city = request.form.get("city")
-    postal_code = request.form.get("postal_code")
-    phone = request.form.get("phone")
+    data = request.get_json()
+
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    email = data.get("email")
+
+    address = data.get("address")
+    district = data.get("district")
+    city = data.get("city")
+    postal_code = data.get("postal_code")
+    phone = data.get("phone")
+
     if t.add_customer_address(address, district, city, phone, postal_code):
         t.add_customer(first_name, last_name, email, phone)
         return jsonify({"success": True})

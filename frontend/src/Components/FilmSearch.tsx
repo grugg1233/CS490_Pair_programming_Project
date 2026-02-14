@@ -58,10 +58,10 @@ const FilmSearch = () => {
   }, [query]);
 
   return (
-    <section className="parent-section pt-12 bg-black block space-y-8 p-12">
+    <section className="parent-section pt-12 bg-black block space-y-8 p-12 min-h-screen">
       {/* got this from flowbite */}
 
-      <form className="w-full p-4">
+      <form className="w-full p-4" onSubmit={(e) => e.preventDefault()}>
         <label className="block mb-2.5 text-sm font-medium text-heading sr-only ">
           Search
         </label>

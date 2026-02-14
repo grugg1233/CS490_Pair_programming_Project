@@ -47,6 +47,10 @@ const CustomersPage = () => {
 
     setCustomers((prev) => prev.filter((c) => c.customer_id !== customer_id));
 
+    setSearchCustomer((prev) =>
+      prev.filter((c) => c.customer_id !== customer_id),
+    );
+
     setInfoOpen(false);
     setSelectedCustomerId(null);
   };
@@ -63,7 +67,10 @@ const CustomersPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <form className="w-full px-20 pb-4 pt-12">
+      <form
+        className="w-full px-20 pb-4 pt-12"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <label className="block mb-2.5 text-sm font-medium text-heading sr-only ">
           Search
         </label>

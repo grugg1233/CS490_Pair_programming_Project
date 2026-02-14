@@ -302,7 +302,7 @@ def return_genre_films(genre: str):
 
 def search_films(query: str):
     sql = """
-        SELECT
+        SELECT DISTINCT
             f.film_id,
             f.title
         FROM film f
@@ -328,7 +328,7 @@ def search_films(query: str):
 
 def spec_customer(customer_id):
     sql = """
-    select  
+    select distinct
         c.first_name, 
         c.last_name, 
         c.email, 
