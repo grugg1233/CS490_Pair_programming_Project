@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Card from "./FilmCard";
 import FilmModal from "./FilmModal";
-import type { FilmData } from "../utils/types";
+import type { FilmData } from "../../utils/types";
 
 const HomeFilm = () => {
   const [films, setFilms] = useState<FilmData[]>([]);

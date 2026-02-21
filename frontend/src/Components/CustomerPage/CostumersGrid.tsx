@@ -1,4 +1,4 @@
-import type { AllCustomers } from "../utils/types";
+import type { AllCustomers } from "../../utils/types";
 import PaginationControls from "./CustomerPagination";
 import { useMemo } from "react";
 

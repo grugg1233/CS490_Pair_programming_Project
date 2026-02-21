@@ -1,5 +1,5 @@
 import Navbar from "../Components/Navbar";
-import CustomersPage from "../Components/CustomerPage";
+import CustomersPage from "../Components/CustomerPage/CustomerPage";
 
 const Customers = () => {
 return (

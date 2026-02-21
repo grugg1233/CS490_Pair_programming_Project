@@ -1,4 +1,4 @@
-import type { Pagination } from "../utils/types";
+import type { Pagination } from "../../utils/types";
 
 const PaginationControls = ({
   page,

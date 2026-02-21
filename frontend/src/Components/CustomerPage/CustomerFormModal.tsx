@@ -1,4 +1,7 @@
 import AddUserForm from "./AddUserForm";
+import axios from "axios";
+import type { AddFormData } from "../../utils/types";
+
 
 const AddCustomerModal = ({
   open,
@@ -9,13 +12,21 @@ const AddCustomerModal = ({
 }) => {
   if (!open) return null;
 
+  const handleAdd = async (data: AddFormData ) => {
+    await axios.post("http://localhost:8080/addCustomer", {
+      ...data,
+      postal_code: data.postal_code ? Number(data.postal_code) : null,
+      phone: data.phone ? Number(data.phone) : null,
+    });
+  };
+
   return (
     <dialog
       open
       className="modal modal-middle w-100vh h-100vh backdrop-blur-[8px]"
     >
       <div className="modal-box bg-zinc-900 text-white border border-white/10">
-        <AddUserForm onSuccess={onClose} />
+        <AddUserForm onSuccess={onClose} onSubmit={handleAdd} title="Add Customer" />
         <div className="modal-action">
           <button
             className="btn btn-ghost w-6 h-6 rounded-full absolute top-7 right-6"

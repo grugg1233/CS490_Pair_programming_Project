@@ -1,5 +1,5 @@
 export interface FilmData {
-  film_id: number | null;
+  film_id: number;
   title: string;
   category: string | null;
   count: number | null;
@@ -68,7 +68,9 @@ export interface CustModalData {
   last_name: string;
   email: string;
   address: string;
+  district: string;
   city: string;
+  postal_code: string;
   country: string;
   phone: string;
 }
@@ -81,6 +83,7 @@ export interface AddFormData {
   district: string;
   city: string;
   postal_code: string;
+  country : string;
   phone: string;
 }
 

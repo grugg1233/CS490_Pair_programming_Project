@@ -1,8 +1,14 @@
-import axios from "axios";
-import { useState } from "react";
-import type { AddFormData } from "../utils/types";
+import { useState, useEffect } from "react";
+import type { AddFormData } from "../../utils/types";
 
-const AddUserForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+type Props = {
+  title: string;
+  initialData?: AddFormData;
+  onSubmit: (data: AddFormData) => Promise<void>;
+  onSuccess?: () => void;
+};
+
+const AddUserForm = ({ title, initialData, onSubmit, onSuccess }: Props) => {
   const [formData, setFormData] = useState<AddFormData>({
     first_name: "",
     last_name: "",
@@ -11,8 +17,15 @@ const AddUserForm = ({ onSuccess }: { onSuccess?: () => void }) => {
     district: "",
     city: "",
     postal_code: "",
+    country: "",
     phone: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -23,36 +36,17 @@ const AddUserForm = ({ onSuccess }: { onSuccess?: () => void }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Submitted");
 
-    await axios.post("http://localhost:8080/addCustomer", {
-      ...formData,
-      postal_code: formData.postal_code ? Number(formData.postal_code) : null,
-      phone: formData.phone ? Number(formData.phone) : null,
-    });
+    await onSubmit(formData);
 
     onSuccess?.();
-
-    setFormData({
-      first_name: "",
-      last_name: "",
-      email: "",
-      address: "",
-      district: "",
-      city: "",
-      postal_code: "",
-      phone: "",
-    });
   };
-
   return (
     <form
       onSubmit={handleSubmit}
       className="grid grid-cols-1 md:grid-cols-2 gap-4"
     >
-      <h2 className="col-span-full text-2xl font-semibold mb-4">
-        Add Customer
-      </h2>
+      <h2 className="col-span-full text-2xl font-semibold mb-4">{title}</h2>
 
       {[
         ["First Name", "first_name", "text"],
@@ -62,6 +56,7 @@ const AddUserForm = ({ onSuccess }: { onSuccess?: () => void }) => {
         ["District", "district", "text"],
         ["City", "city", "text"],
         ["Postal Code", "postal_code", "number"],
+        ["Country", "country", "country"],
         ["Phone", "phone", "number"],
       ].map(([name, id, type]) => (
         <input

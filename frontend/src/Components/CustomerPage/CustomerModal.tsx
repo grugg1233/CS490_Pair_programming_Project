@@ -1,16 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import type { CustModalData } from "../utils/types";
+import type { CustModalData } from "../../utils/types";
 const CustomerModal = ({
   customer_id,
   open,
   onClose,
   onDelete,
+  onEditOpen,
 }: {
   customer_id: number;
   open: boolean;
   onClose: () => void;
   onDelete: (customer_id: number) => void;
+  onEditOpen: () => void;
 }) => {
   const [customer, setCustomer] = useState<CustModalData>();
 
@@ -95,9 +97,19 @@ const CustomerModal = ({
 
         <button
           onClick={() => {
-            onDelete(customer_id);
+            onClose();
+            onEditOpen();
           }}
           className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-8 w-full font-bold"
+        >
+          Edit Customer Info
+        </button>
+
+        <button
+          onClick={() => {
+            onDelete(customer_id);
+          }}
+          className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-4 w-full font-bold"
         >
           Delete Customer
         </button>

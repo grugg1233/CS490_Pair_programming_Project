@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
-import type { Genre } from "../utils/types";
-import type { FilmData } from "../utils/types";
+import type { Genre } from "../../utils/types";
+import type { FilmData } from "../../utils/types";
 import axios from "axios";
-import Card from "./FilmCard";
-import FilmModal from "./FilmModal";
-import { genres } from "../utils/types";
-import PaginationControls from "./CustomerPagination";
+import Card from "../FilmHome/FilmCard";
+import FilmModal from "../FilmHome/FilmModal";
+import { genres } from "../../utils/types";
+import PaginationControls from "../CustomerPage/CustomerPagination";
 
 const FilmSearch = () => {
   const [genre, setGenre] = useState<Genre>(genres[0]);

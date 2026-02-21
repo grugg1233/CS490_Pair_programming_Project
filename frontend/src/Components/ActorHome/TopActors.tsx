@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import ActorCard from "./ActorCard";
 import ActorModal from "./ActorModal";
-import type { ActorData, ActorMovies, ActorWithMovies } from "../utils/types";
+import type {
+  ActorData,
+  ActorMovies,
+  ActorWithMovies,
+} from "../../utils/types";
 
 interface TopActorsProps {
   storeId: number;
@@ -57,7 +61,7 @@ const TopActors = ({ storeId }: TopActorsProps) => {
   return (
     <section className="bg-black p-8 pb-24 md:pb-12">
       <h2 className="text-[32px] font-bold mb-1">Top 5 Actors</h2>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-1 sm:grid-col-2 lg:grid-cols-3 gap-4">
         {actorsWithMovies.map((actor, idx) => (
           <ActorCard
             key={actor.actor_id}

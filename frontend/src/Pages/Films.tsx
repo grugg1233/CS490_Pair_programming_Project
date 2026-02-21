@@ -1,5 +1,5 @@
 import Navbar from "../Components/Navbar";
-import FilmPage from "../Components/FilmsPage";
+import FilmPage from "../Components/FilmPage/FilmsPage";
 
 const Films = () =>  {
 return (

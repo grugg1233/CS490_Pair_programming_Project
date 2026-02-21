@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import type { FilmDetails, filmActors } from "../utils/types";
+import type { FilmDetails, filmActors } from "../../utils/types";
 import Info from "./FIlmCardInfo";
 
 interface FilmModalProps {

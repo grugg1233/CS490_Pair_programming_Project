@@ -242,11 +242,10 @@ def add_customer_address(address, district, city, phone, postal_code):
                     VALUES (%s, 103)
                     ON DUPLICATE KEY UPDATE city_id = LAST_INSERT_ID(city_id)
                     """,
-                    (city,)
+                    (city,),
                 )
                 city_id = cursor.lastrowid
 
-                
                 cursor.execute(
                     """
                     INSERT INTO address
@@ -254,7 +253,7 @@ def add_customer_address(address, district, city, phone, postal_code):
                     VALUES
                         (%s, NULL, %s, %s, %s, ST_GeomFromText('POINT(0.0 0.0)', 0), %s)
                     """,
-                    (address, district, city_id, phone, postal_code)
+                    (address, district, city_id, phone, postal_code),
                 )
 
             connection.commit()
@@ -263,7 +262,6 @@ def add_customer_address(address, district, city, phone, postal_code):
     except Exception as e:
         print("add_customer_address failed:", e)
         return False
-
 
 
 def return_all_film():
@@ -335,6 +333,8 @@ def spec_customer(customer_id):
         ci.city,
         co.country,
         A.address,
+        A.district,
+        A.postal_code,
         A.phone
     from customer as c 
         inner join address as A 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import type { AllCustomers } from "../utils/types";
+import type { AllCustomers } from "../../utils/types";
 import AddCustomerButton from "./AddUserButton";
 import CustomersGrid from "./CostumersGrid";
 import AddCustomerModal from "./CustomerFormModal";
 import CustomerModal from "./CustomerModal";
 import axios from "axios";
+import EditCustomerModal from "./EditCustomer";
 
 const CustomersPage = () => {
   const [customers, setCustomers] = useState<AllCustomers[]>([]);
@@ -19,6 +20,10 @@ const CustomersPage = () => {
   const [query, setQuery] = useState<string>("");
   const [searchCustomers, setSearchCustomer] = useState<AllCustomers[]>([]);
   const displayedCustomers = query ? searchCustomers : customers;
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openModal = () => setEditModalOpen(true);
+  const closeModal = () => setEditModalOpen(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -126,6 +131,15 @@ const CustomersPage = () => {
           open={isInfoOpen}
           onClose={() => setInfoOpen(false)}
           onDelete={deleteCustomer}
+          onEditOpen={openModal}
+        />
+      )}
+
+      {editModalOpen && (
+        <EditCustomerModal
+          open={editModalOpen}
+          onClose={closeModal}
+          customerId={selectedCustomerId}
         />
       )}
     </div>

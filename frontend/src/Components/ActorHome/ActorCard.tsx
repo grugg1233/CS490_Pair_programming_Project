@@ -1,4 +1,4 @@
-import type { ActorData } from "../utils/types";
+import type { ActorData } from "../../utils/types";
 
 interface ActorCardProps {
   actor: ActorData;

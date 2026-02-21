@@ -1,4 +1,4 @@
-import type { ActorWithMovies } from "../utils/types";
+import type { ActorWithMovies } from "../../utils/types";
 
 interface ActorModalProps {
   actor: ActorWithMovies | null;
