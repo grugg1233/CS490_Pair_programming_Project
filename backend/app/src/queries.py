@@ -376,3 +376,64 @@ def search_customer(query: str):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (search, search, search))
             return cursor.fetchall()
+
+
+def edit_cust(customer_id: int, cust_info: dict):
+    sql_customer = """
+        UPDATE customer
+        SET first_name=%s,
+            last_name=%s,
+            email=%s,
+            active=%s,
+            last_update=NOW()
+        WHERE customer_id=%s;
+    """
+
+    sql_address = """
+        UPDATE address a
+        JOIN customer c ON c.address_id = a.address_id
+        SET a.address=%s,
+            a.address2=%s,
+            a.district=%s,
+            a.city_id=%s,
+            a.postal_code=%s,
+            a.phone=%s,
+            a.last_update=NOW()
+        WHERE c.customer_id=%s;
+    """
+
+    first_name = cust_info.get("first_name")
+    last_name  = cust_info.get("last_name")
+    email      = cust_info.get("email")
+    active     = cust_info.get("active", 1)
+
+    address     = cust_info.get("address")
+    address2    = cust_info.get("address2")  # optional
+    district    = cust_info.get("district")
+    city        = cust_info.get("city")
+    postal_code = cust_info.get("postal_code")
+    phone       = cust_info.get("phone")
+
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor() as cursor:
+           
+            cursor.execute(
+                "SELECT city_id FROM city WHERE city=%s AND country_id=103 LIMIT 1",
+                (city,),
+            )
+            row = cursor.fetchone()
+            if row:
+                city_id = row[0]
+            else:
+                cursor.execute(
+                    "INSERT INTO city (city, country_id) VALUES (%s, 103)",
+                    (city,),
+                )
+                city_id = cursor.lastrowid
+
+            cursor.execute(sql_customer, (first_name, last_name, email, active, customer_id))
+            cursor.execute(sql_address, (address, address2, district, city_id, postal_code, phone, customer_id))
+
+        connection.commit()
+
+    return {"updated_customer_id": customer_id}

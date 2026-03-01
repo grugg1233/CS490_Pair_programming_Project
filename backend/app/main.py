@@ -99,5 +99,22 @@ def return_search_customers(query: str):
     return jsonify(t.search_customer(query))
 
 
+@app.route("/updateCustomer/<int:customer_id>", methods=["PUT"])
+def update_customer(customer_id: int):
+    data = request.get_json() or {}
+
+
+    required = ["first_name", "last_name", "email", "address", "district", "city"]
+    missing = [k for k in required if not data.get(k)]
+    if missing:
+        return jsonify({"success": False, "error": f"Missing fields: {missing}"}), 400
+
+    try:
+        result = t.edit_cust(customer_id, data)
+        return jsonify({"success": True, **result})
+    except Exception as e:
+
+        return jsonify({"success": False, "error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
