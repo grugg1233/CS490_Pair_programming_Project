@@ -98,6 +98,5 @@ def return_search_film(query: str):
 def return_search_customers(query: str):
     return jsonify(t.search_customer(query))
 
-
 if __name__ == "__main__":
     app.run(debug=True)

@@ -6,9 +6,11 @@ import Info from "./FIlmCardInfo";
 interface FilmModalProps {
   filmId: number | null;
   onClose: () => void;
+  onRent?: (filmId: number) => void;
+  rentFilm: boolean;
 }
 
-const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
+const FilmModal = ({ filmId, onClose, onRent, rentFilm }: FilmModalProps) => {
   const [film, setFilm] = useState<FilmDetails>();
   const [actors, setFilmActors] = useState<filmActors[]>([]);
   const [loading, setLoading] = useState(false);
@@ -39,6 +41,16 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
   useEffect(() => {
     if (filmId === null) return;
     dialogRef.current?.showModal();
+  }, [filmId]);
+
+  useEffect(() => {
+    if (!dialogRef.current) return;
+
+    if (filmId !== null) {
+      dialogRef.current.showModal();
+    } else {
+      dialogRef.current.close();
+    }
   }, [filmId]);
 
   return (
@@ -96,6 +108,23 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
 
           <div className="modal-action">
             <form method="dialog">
+              {rentFilm && filmId && onRent && (
+                <button
+                  className=" btn
+                  bg-red-600
+                  hover:bg-black
+                  text-white
+                  border border-white/10
+                  shadow-md
+                  p-2
+                  m-2
+                  "
+                  type = "button"
+                  onClick={() => onRent(filmId)}
+                >
+                  Rent Film
+                </button>
+              )}
               <button
                 className="
                   btn
@@ -105,7 +134,9 @@ const FilmModal = ({ filmId, onClose }: FilmModalProps) => {
                   border border-white/10
                   shadow-md
                   p-2
+                  m-2
                 "
+                type = "button"
                 onClick={onClose}
               >
                 Close

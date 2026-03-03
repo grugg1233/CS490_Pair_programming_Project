@@ -2,7 +2,7 @@ import type { FilmData } from "../../utils/types";
 
 interface FilmCardProps {
   film: FilmData;
-  showFilmId: boolean;
+  showFilmId: boolean;    
   onClick: (filmId: number) => void;
 }
 

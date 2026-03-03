@@ -31,19 +31,19 @@ const HomeFilm = () => {
             title: FilmData.title,
             category: FilmData.category,
             count: FilmData.count,
-            rank: index+1,
+            rank: index + 1,
           };
 
           return (
-            <Card film={film} onClick={setSelectedFilmId} showFilmId={true}/>
+            <Card film={film} onClick={setSelectedFilmId} showFilmId={true} />
           );
         })}
       </div>
       <FilmModal
         filmId={selectedFilmId}
         onClose={() => setSelectedFilmId(null)}
+        rentFilm={false}
       />
-      
     </div>
   );
 };

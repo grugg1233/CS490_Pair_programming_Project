@@ -113,6 +113,13 @@ const CustomerModal = ({
         >
           Delete Customer
         </button>
+
+        <button
+        
+          className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-4 w-full font-bold"
+        >
+          View Rent History
+        </button>
       </div>
     </dialog>
   );
