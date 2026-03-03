@@ -154,10 +154,9 @@ def return_Film_Modal_actors(film_id):
 
 def get_all_films():
     sql = """
-        select all
-            f.title 
-        from films f
-        ; 
+        SELECT f.film_id, f.title
+        FROM film f
+        ORDER BY f.title;
     """
     with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
@@ -188,16 +187,33 @@ def get_all_customers():
 
 def remove_customer(c_id):
     try:
-        sql = """ 
-        update customer set active = 0 where customer_id = %s; 
-        """
-
         with connecter.connect(**DB_CONFIG) as connection:
-            with connection.cursor(dictionary=True) as cursor:
-                cursor.execute(sql, (c_id,))
-            connection.commit()
+            with connection.cursor() as cursor:
+                connection.start_transaction()
+
+
+                cursor.execute(
+                    "DELETE FROM payment WHERE customer_id = %s;",
+                    (c_id,)
+                )
+
+                cursor.execute(
+                    "DELETE FROM rental WHERE customer_id = %s;",
+                    (c_id,)
+                )
+
+                cursor.execute(
+                    "DELETE FROM customer WHERE customer_id = %s;",
+                    (c_id,)
+                )
+
+                connection.commit()
         return True
-    except:
+    except Exception:
+        try:
+            connection.rollback()
+        except Exception:
+            pass
         return False
 
 
@@ -350,7 +366,6 @@ def spec_customer(customer_id):
             cursor.execute(sql, (customer_id,))
             return cursor.fetchall()
 
-
 def search_customer(query: str):
     sql = """
         SELECT 
@@ -362,21 +377,18 @@ def search_customer(query: str):
         FROM customer c
         INNER JOIN address a ON c.address_id = a.address_id
         WHERE c.active = 1
-        AND (
+          AND (
               c.first_name LIKE %s
               OR c.last_name LIKE %s
-              OR c.customer_id = %s
-        )
-        ORDER BY c.customer_id asc;
+              OR CAST(c.customer_id AS CHAR) LIKE %s
+          )
+        ORDER BY c.customer_id ASC;
     """
-
-    search = f"%{query}%"
-
+    like = f"%{query}%"
     with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql, (search, search, search))
+            cursor.execute(sql, (like, like, like))
             return cursor.fetchall()
-
 
 def edit_cust(customer_id: int, cust_info: dict):
     sql_customer = """
@@ -437,3 +449,122 @@ def edit_cust(customer_id: int, cust_info: dict):
         connection.commit()
 
     return {"updated_customer_id": customer_id}
+
+# •    As a user I want to be able to view customer details and see their past and present rental history
+# •    As a user I want to be able to indicate that a customer has returned a rented movie 
+# •    As a user I want to be able to rent a film out to a customer
+
+
+def customer_rental_and_return_history(cust_id: int):
+    sql = """
+        SELECT
+            c.customer_id,
+            CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+            c.email,
+            c.active,
+            r.rental_id,
+            r.rental_date,
+            r.return_date,
+            i.inventory_id,
+            f.film_id,
+            f.title
+        FROM customer AS c
+        LEFT JOIN rental AS r
+            ON r.customer_id = c.customer_id
+        LEFT JOIN inventory AS i
+            ON i.inventory_id = r.inventory_id
+        LEFT JOIN film AS f
+            ON f.film_id = i.film_id
+        WHERE c.customer_id = %s
+        ORDER BY r.rental_date DESC;
+    """
+    with connecter.connect(**DB_CONFIG) as connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute(sql, (cust_id,))  
+            return cursor.fetchall()
+
+
+def customer_return_a_film(cust_id: int, inventory_id: int) -> bool:
+    sql = """
+        UPDATE rental
+        SET return_date = NOW(), last_update = NOW()
+        WHERE customer_id = %s
+          AND inventory_id = %s
+          AND return_date IS NULL
+        ORDER BY rental_date DESC
+        LIMIT 1;
+    """
+    try:
+        with connecter.connect(**DB_CONFIG) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(sql, (cust_id, inventory_id))
+                ok = cursor.rowcount == 1
+            connection.commit()
+        return ok
+    except Exception as e:
+        print("customer_return_a_film failed:", e)
+        return False
+
+
+def customer_rent_a_film(cust_id: int, inventory_id: int, staff_id: int = 1) -> dict:
+    try:
+        with connecter.connect(**DB_CONFIG) as connection:
+            with connection.cursor(dictionary=True) as cursor:
+                connection.start_transaction()
+
+                # Customer must exist + be active
+                cursor.execute(
+                    "SELECT active FROM customer WHERE customer_id=%s FOR UPDATE;",
+                    (cust_id,)
+                )
+                cust = cursor.fetchone()
+                if not cust:
+                    connection.rollback()
+                    return {"ok": False, "error": "Customer not found."}
+                if cust["active"] != 1:
+                    connection.rollback()
+                    return {"ok": False, "error": "Customer is not active."}
+
+                # Inventory must exist
+                cursor.execute(
+                    "SELECT inventory_id FROM inventory WHERE inventory_id=%s FOR UPDATE;",
+                    (inventory_id,)
+                )
+                inv = cursor.fetchone()
+                if not inv:
+                    connection.rollback()
+                    return {"ok": False, "error": "Inventory item not found."}
+
+                # Inventory must not be currently rented out
+                cursor.execute(
+                    """
+                    SELECT rental_id
+                    FROM rental
+                    WHERE inventory_id=%s AND return_date IS NULL
+                    LIMIT 1
+                    FOR UPDATE;
+                    """,
+                    (inventory_id,)
+                )
+                if cursor.fetchone():
+                    connection.rollback()
+                    return {"ok": False, "error": "Inventory item is currently rented out."}
+
+                cursor.execute(
+                    """
+                    INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id, last_update)
+                    VALUES (NOW(), %s, %s, %s, NOW());
+                    """,
+                    (inventory_id, cust_id, staff_id)
+                )
+                rental_id = cursor.lastrowid
+
+                connection.commit()
+                return {"ok": True, "rental_id": rental_id}
+
+    except Exception as e:
+        try:
+            connection.rollback()
+        except Exception:
+            pass
+        return {"ok": False, "error": str(e)}

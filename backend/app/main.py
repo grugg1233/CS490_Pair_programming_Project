@@ -37,7 +37,7 @@ def film_modal_actors(film_id: int):
 def delete_cust(customer_id: int):
     b = t.remove_customer(customer_id)
     if not b:
-        return f"ERROR - removing customer with customer id {customer_id}"
+        return jsonify({"success": False, "error": f"ERROR - removing customer with customer id {customer_id}"}), 500
     else:
         return jsonify({"success": True})
 
@@ -115,6 +115,44 @@ def update_customer(customer_id: int):
     except Exception as e:
 
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/customerRentalHistory/<int:customer_id>", methods=["GET"])
+def customer_rental_history(customer_id: int):
+    return jsonify(t.customer_rental_and_return_history(customer_id))
+
+@app.route("/customerRentFilm/<int:customer_id>", methods=["POST"])
+def customer_rent_film(customer_id: int):
+    data = request.get_json() or {}
+    inventory_id = data.get("inventory_id")
+    staff_id = data.get("staff_id", 1)
+
+    if inventory_id is None:
+        return jsonify({"success": False, "error": "Missing inventory_id"}), 400
+
+    result = t.customer_rent_a_film(customer_id, int(inventory_id), int(staff_id))
+
+    if not result.get("ok"):
+
+        return jsonify({"success": False, **result}), 409
+
+    return jsonify({"success": True, **result})
+
+@app.route("/customerReturnFilm/<int:customer_id>", methods=["POST"])
+def customer_return_film(customer_id: int):
+    data = request.get_json() or {}
+    inventory_id = data.get("inventory_id")
+
+    if inventory_id is None:
+        return jsonify({"success": False, "error": "Missing inventory_id"}), 400
+
+    ok = t.customer_return_a_film(customer_id, int(inventory_id))
+    if not ok:
+
+        return jsonify({"success": False, "error": "No active rental found to return"}), 409
+
+    return jsonify({"success": True})
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
