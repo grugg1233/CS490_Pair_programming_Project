@@ -98,11 +98,9 @@ def return_search_film(query: str):
 def return_search_customers(query: str):
     return jsonify(t.search_customer(query))
 
-
 @app.route("/updateCustomer/<int:customer_id>", methods=["PUT"])
 def update_customer(customer_id: int):
     data = request.get_json() or {}
-
 
     required = ["first_name", "last_name", "email", "address", "district", "city"]
     missing = [k for k in required if not data.get(k)]
@@ -123,23 +121,26 @@ def customer_rental_history(customer_id: int):
 @app.route("/customerRentFilm/<int:customer_id>", methods=["POST"])
 def customer_rent_film(customer_id: int):
     data = request.get_json() or {}
-    inventory_id = data.get("inventory_id")
+    film_id = data.get("film_id")
     staff_id = data.get("staff_id", 1)
 
-    if inventory_id is None:
-        return jsonify({"success": False, "error": "Missing inventory_id"}), 400
+    if film_id is None:
+        return jsonify({"success": False, "error": "Missing film_id"}), 400
 
-    result = t.customer_rent_a_film(customer_id, int(inventory_id), int(staff_id))
+    result = t.customer_rent_a_film(
+        customer_id,
+        int(film_id),
+        int(staff_id)
+    )
 
     if not result.get("ok"):
-
         return jsonify({"success": False, **result}), 409
 
     return jsonify({"success": True, **result})
 
 @app.route("/customerReturnFilm/<int:customer_id>", methods=["POST"])
 def customer_return_film(customer_id: int):
-    data = request.get_json() or {}
+    data = request.get_json() 
     inventory_id = data.get("inventory_id")
 
     if inventory_id is None:
@@ -151,7 +152,6 @@ def customer_return_film(customer_id: int):
         return jsonify({"success": False, "error": "No active rental found to return"}), 409
 
     return jsonify({"success": True})
-
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import AddCustomerModal from "./CustomerFormModal";
 import CustomerModal from "./CustomerModal";
 import axios from "axios";
 import EditCustomerModal from "./EditCustomer";
+import RentHistory from "./RentHistory";
 
 const CustomersPage = () => {
   const [customers, setCustomers] = useState<AllCustomers[]>([]);
@@ -21,6 +22,7 @@ const CustomersPage = () => {
   const [searchCustomers, setSearchCustomer] = useState<AllCustomers[]>([]);
   const displayedCustomers = query ? searchCustomers : customers;
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   const openModal = () => setEditModalOpen(true);
   const closeModal = () => setEditModalOpen(false);
@@ -129,6 +131,7 @@ const CustomersPage = () => {
         <CustomerModal
           customer_id={selectedCustomerId}
           open={isInfoOpen}
+          onViewHistory={() => setShowHistory(true)}
           onClose={() => setInfoOpen(false)}
           onDelete={deleteCustomer}
           onEditOpen={openModal}
@@ -139,6 +142,14 @@ const CustomersPage = () => {
         <EditCustomerModal
           open={editModalOpen}
           onClose={closeModal}
+          customerId={selectedCustomerId}
+        />
+      )}
+
+      {showHistory && selectedCustomerId != null && (
+        <RentHistory
+          onClose={() => setShowHistory(false)}
+          open={showHistory}
           customerId={selectedCustomerId}
         />
       )}

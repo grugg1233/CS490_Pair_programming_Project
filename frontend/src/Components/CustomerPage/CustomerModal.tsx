@@ -5,12 +5,14 @@ const CustomerModal = ({
   customer_id,
   open,
   onClose,
+  onViewHistory,
   onDelete,
   onEditOpen,
 }: {
   customer_id: number;
   open: boolean;
   onClose: () => void;
+  onViewHistory: () => void;
   onDelete: (customer_id: number) => void;
   onEditOpen: () => void;
 }) => {
@@ -115,7 +117,10 @@ const CustomerModal = ({
         </button>
 
         <button
-        
+          onClick={() => {
+            onViewHistory();
+            onClose();
+          }}
           className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-4 w-full font-bold"
         >
           View Rent History

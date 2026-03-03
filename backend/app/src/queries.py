@@ -191,21 +191,11 @@ def remove_customer(c_id):
             with connection.cursor() as cursor:
                 connection.start_transaction()
 
+                cursor.execute("DELETE FROM payment WHERE customer_id = %s;", (c_id,))
 
-                cursor.execute(
-                    "DELETE FROM payment WHERE customer_id = %s;",
-                    (c_id,)
-                )
+                cursor.execute("DELETE FROM rental WHERE customer_id = %s;", (c_id,))
 
-                cursor.execute(
-                    "DELETE FROM rental WHERE customer_id = %s;",
-                    (c_id,)
-                )
-
-                cursor.execute(
-                    "DELETE FROM customer WHERE customer_id = %s;",
-                    (c_id,)
-                )
+                cursor.execute("DELETE FROM customer WHERE customer_id = %s;", (c_id,))
 
                 connection.commit()
         return True
@@ -366,6 +356,7 @@ def spec_customer(customer_id):
             cursor.execute(sql, (customer_id,))
             return cursor.fetchall()
 
+
 def search_customer(query: str):
     sql = """
         SELECT 
@@ -389,6 +380,7 @@ def search_customer(query: str):
         with connection.cursor(dictionary=True) as cursor:
             cursor.execute(sql, (like, like, like))
             return cursor.fetchall()
+
 
 def edit_cust(customer_id: int, cust_info: dict):
     sql_customer = """
@@ -415,20 +407,20 @@ def edit_cust(customer_id: int, cust_info: dict):
     """
 
     first_name = cust_info.get("first_name")
-    last_name  = cust_info.get("last_name")
-    email      = cust_info.get("email")
-    active     = cust_info.get("active", 1)
+    last_name = cust_info.get("last_name")
+    email = cust_info.get("email")
+    active = cust_info.get("active", 1)
 
-    address     = cust_info.get("address")
-    address2    = cust_info.get("address2")  # optional
-    district    = cust_info.get("district")
-    city        = cust_info.get("city")
+    address = cust_info.get("address")
+    address2 = cust_info.get("address2")  # optional
+    district = cust_info.get("district")
+    city = cust_info.get("city")
     postal_code = cust_info.get("postal_code")
-    phone       = cust_info.get("phone")
+    phone = cust_info.get("phone")
 
     with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor() as cursor:
-           
+
             cursor.execute(
                 "SELECT city_id FROM city WHERE city=%s AND country_id=103 LIMIT 1",
                 (city,),
@@ -443,31 +435,37 @@ def edit_cust(customer_id: int, cust_info: dict):
                 )
                 city_id = cursor.lastrowid
 
-            cursor.execute(sql_customer, (first_name, last_name, email, active, customer_id))
-            cursor.execute(sql_address, (address, address2, district, city_id, postal_code, phone, customer_id))
+            cursor.execute(
+                sql_customer, (first_name, last_name, email, active, customer_id)
+            )
+            cursor.execute(
+                sql_address,
+                (address, address2, district, city_id, postal_code, phone, customer_id),
+            )
 
         connection.commit()
 
     return {"updated_customer_id": customer_id}
 
+
 # •    As a user I want to be able to view customer details and see their past and present rental history
-# •    As a user I want to be able to indicate that a customer has returned a rented movie 
+# •    As a user I want to be able to indicate that a customer has returned a rented movie
 # •    As a user I want to be able to rent a film out to a customer
 
 
 def customer_rental_and_return_history(cust_id: int):
     sql = """
         SELECT
-            c.customer_id,
-            CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
-            c.email,
-            c.active,
             r.rental_id,
+            f.film_id,
+            f.title,
+            i.inventory_id,
             r.rental_date,
             r.return_date,
-            i.inventory_id,
-            f.film_id,
-            f.title
+            CASE 
+                WHEN r.return_date IS NULL THEN FALSE
+                ELSE TRUE
+            END AS returned
         FROM customer AS c
         LEFT JOIN rental AS r
             ON r.customer_id = c.customer_id
@@ -480,7 +478,7 @@ def customer_rental_and_return_history(cust_id: int):
     """
     with connecter.connect(**DB_CONFIG) as connection:
         with connection.cursor(dictionary=True) as cursor:
-            cursor.execute(sql, (cust_id,))  
+            cursor.execute(sql, (cust_id,))
             return cursor.fetchall()
 
 
@@ -506,65 +504,44 @@ def customer_return_a_film(cust_id: int, inventory_id: int) -> bool:
         return False
 
 
-def customer_rent_a_film(cust_id: int, inventory_id: int, staff_id: int = 1) -> dict:
+def customer_rent_a_film(cust_id: int, film_id: int, staff_id: int = 1) -> dict:
+    sql = """
+        INSERT INTO rental (
+            rental_date,
+            inventory_id,
+            customer_id,
+            staff_id,
+            last_update
+        )
+        SELECT
+            NOW(),
+            i.inventory_id,
+            %s,
+            %s,
+            NOW()
+        FROM inventory i
+        JOIN customer c
+            ON c.customer_id = %s
+        LEFT JOIN rental r
+            ON r.inventory_id = i.inventory_id
+            AND r.return_date IS NULL
+        WHERE
+            i.film_id = %s
+            AND c.active = 1
+            AND r.rental_id IS NULL
+        LIMIT 1;
+    """
+
     try:
         with connecter.connect(**DB_CONFIG) as connection:
-            with connection.cursor(dictionary=True) as cursor:
-                connection.start_transaction()
-
-                # Customer must exist + be active
-                cursor.execute(
-                    "SELECT active FROM customer WHERE customer_id=%s FOR UPDATE;",
-                    (cust_id,)
-                )
-                cust = cursor.fetchone()
-                if not cust:
-                    connection.rollback()
-                    return {"ok": False, "error": "Customer not found."}
-                if cust["active"] != 1:
-                    connection.rollback()
-                    return {"ok": False, "error": "Customer is not active."}
-
-                # Inventory must exist
-                cursor.execute(
-                    "SELECT inventory_id FROM inventory WHERE inventory_id=%s FOR UPDATE;",
-                    (inventory_id,)
-                )
-                inv = cursor.fetchone()
-                if not inv:
-                    connection.rollback()
-                    return {"ok": False, "error": "Inventory item not found."}
-
-                # Inventory must not be currently rented out
-                cursor.execute(
-                    """
-                    SELECT rental_id
-                    FROM rental
-                    WHERE inventory_id=%s AND return_date IS NULL
-                    LIMIT 1
-                    FOR UPDATE;
-                    """,
-                    (inventory_id,)
-                )
-                if cursor.fetchone():
-                    connection.rollback()
-                    return {"ok": False, "error": "Inventory item is currently rented out."}
-
-                cursor.execute(
-                    """
-                    INSERT INTO rental (rental_date, inventory_id, customer_id, staff_id, last_update)
-                    VALUES (NOW(), %s, %s, %s, NOW());
-                    """,
-                    (inventory_id, cust_id, staff_id)
-                )
-                rental_id = cursor.lastrowid
-
+            with connection.cursor() as cursor:
+                cursor.execute(sql, (cust_id, staff_id, cust_id, film_id))
                 connection.commit()
-                return {"ok": True, "rental_id": rental_id}
+
+                if cursor.rowcount == 0:
+                    return {"ok": False, "error": "No available copy or inactive customer."}
+
+                return {"ok": True, "rental_id": cursor.lastrowid}
 
     except Exception as e:
-        try:
-            connection.rollback()
-        except Exception:
-            pass
         return {"ok": False, "error": str(e)}

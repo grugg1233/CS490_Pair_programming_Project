@@ -12,9 +12,8 @@ const RentModal = ({ filmId, open, onClose }: RentModalProps) => {
   const [customerId, setCustomerId] = useState("");
 
   async function handleRequest() {
-    await axios.post("http://localhost:8080/rentFilm", {
-      filmId: filmId,
-      customerId: Number(customerId),
+    await axios.post(`http://localhost:8080/customerRentFilm/${customerId}`, {
+      film_id: filmId,
     });
 
     setCustomerId("");
