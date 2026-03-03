@@ -22,13 +22,13 @@ const EditCustomerModal = ({
     });
   }, [open, customerId]);
 
-  const handleEdit = async (data: AddFormData) => {
-    await axios.put(`http://localhost:8080/updateCustomer/${customerId}`, {
-      ...data,
-      postal_code: data.postal_code ? Number(data.postal_code) : null,
-      phone: data.phone ? Number(data.phone) : null,
-    });
-  };
+const handleEdit = async (data: AddFormData) => {
+  await axios.put(`http://localhost:8080/updateCustomer/${customerId}`, {
+    ...data,
+    postal_code: data.postal_code || null,
+    phone: data.phone || null,
+  });
+};
 
   if (!open) return null;
 
