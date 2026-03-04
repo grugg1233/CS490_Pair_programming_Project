@@ -59,9 +59,9 @@ const TopActors = ({ storeId }: TopActorsProps) => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <section className="bg-black p-8 pb-24 md:pb-12">
-      <h2 className="text-[32px] font-bold mb-1">Top 5 Actors</h2>
-      <ul className="grid grid-cols-1 sm:grid-col-2 lg:grid-cols-3 gap-4">
+    <section className="bg-black p-8 px-16 pb-24 md:pb-12">
+      <h2 className="text-[32px] font-bold mb-6">Top 5 Actors</h2>
+      <ul className="grid grid-cols-1 sm:grid-col-2 lg:grid-cols-3 gap-12">
         {actorsWithMovies.map((actor, idx) => (
           <ActorCard
             key={actor.actor_id}

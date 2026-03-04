@@ -102,7 +102,7 @@ const CustomerModal = ({
             onClose();
             onEditOpen();
           }}
-          className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-8 w-full font-bold"
+          className=" btn bg-red-700 hover:bg-red-900 text-white p-3 mt-6 w-full font-bold"
         >
           Edit Customer Info
         </button>

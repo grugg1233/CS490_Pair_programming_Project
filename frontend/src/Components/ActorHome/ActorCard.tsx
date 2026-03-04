@@ -10,7 +10,7 @@ const ActorCard = ({ actor, rank, onOpen }: ActorCardProps) => {
   return (
     <section
       onClick={onOpen}
-      className="rounded-xl transition p-5 flex items-center m-5
+      className="rounded-xl transition p-5 flex items-center
             bg-[radial-gradient(circle_at_top_left,rgba(180,210,255,0.2),transparent_65%)]
             shadow-[0_8px_30px_rgba(0,0,0,0.35)]
             ring-2 ring-white/30"

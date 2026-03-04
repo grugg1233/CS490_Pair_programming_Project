@@ -22,7 +22,7 @@ const HomeFilm = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="bg-black pt-12 p-6">
+    <div className="bg-black pt-12 p-6 px-16">
       <h1 className="font-bold mb-5 text-[32px]">Top 5 Films</h1>
       <div className="flex flex-wrap gap-6 ">
         {films.map((FilmData, index) => {

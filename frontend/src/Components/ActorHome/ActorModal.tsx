@@ -1,5 +1,4 @@
 import type { ActorWithMovies } from "../../utils/types";
-
 interface ActorModalProps {
   actor: ActorWithMovies | null;
 }
@@ -19,10 +18,10 @@ const ActorModal = ({ actor }: ActorModalProps) => {
         className="
           modal-box
           p-0
-          bg-gradient-to-b from-red-900 via-zinc to-black
+          bg-gradient-to-b from-red-900 via-zinc to-black/90
           text-white
           overflow-hidden
-          border border-white/10
+          border-3 border-white/10 
         "
       >
         <div className="relative p-6 pb-8">

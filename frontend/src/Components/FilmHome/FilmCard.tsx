@@ -18,7 +18,7 @@ const Card = ({ film, onClick, showFilmId }: FilmCardProps) => {
       <div className="justify-center flex w-full md:block md:w-auto lg:block lg:w-auto">
         <div
           onClick={() => onClick(film.film_id)}
-          className="card w-64 h-64 shadow-sm  bg-black 
+          className="card w-60 h-64 shadow-sm  bg-black 
             bg-[radial-gradient(circle_at_top_left,rgba(255,0,0,0.35),transparent_55%)]
             shadow-[0_8px_30px_rgba(0,0,0,0.35)]
             ring-1 ring-white/20"

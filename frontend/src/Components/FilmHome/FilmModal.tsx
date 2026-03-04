@@ -64,9 +64,9 @@ const FilmModal = ({ filmId, onClose, onRent, rentFilm }: FilmModalProps) => {
           className="
             modal-box
             overflow-y-auto
-            bg-gradient-to-b from-red-900 via-zinc to-black
+            bg-gradient-to-b from-red-900 via-zinc to-black/90
             text-white
-            border border-white/10
+            border-3 border-white/10
           "
         >
           {loading && <p>Loading...</p>}
