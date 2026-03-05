@@ -93,6 +93,10 @@ const CustomerModal = ({
                 <span className="font-semibold text-white">Country: </span>
                 <span className="text-gray-300">{customer.country}</span>
               </p>
+                <p>
+                <span className="font-semibold text-white">Customer-Id: </span>
+                <span className="text-gray-300">{customer_id}</span>
+              </p>
             </div>
           </div>
         )}
